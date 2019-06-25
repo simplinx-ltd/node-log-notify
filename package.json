@@ -1,0 +1,36 @@
+{
+  "name": "node-log-notify",
+  "version": "0.0.1",
+  "description": "Watch App Logs & Notify",
+  "scripts": {
+    "start": "NODE_ENV=development node build/app.js",
+    "build": "NODE_ENV=production node build-scripts/build.js",
+    "build-server": "NODE_ENV=production node build-scripts/build-server.js",
+    "watch": "NODE_ENV=development node build-scripts/watch-server.js & node build-scripts/watch-ui.js",
+    "watch-server": "node build-scripts/watch-server.js",
+    "git": "git add . --all; git commit; git push"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "https://github.com/simplinx-ltd/node-log-notify",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simplinx-ltd/node-log-notify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/simplinx-ltd/node-log-notify/issues"
+  },
+  "author": "SimpLinx",
+  "files": [
+    "./build/**/*"
+  ],
+  "devDependencies": {
+    "@types/bluebird": "^3.5.27",
+    "@types/commander": "^2.12.2",
+    "@types/node": "^12.0.8",
+    "@types/nodemailer": "^6.2.0",
+    "@types/sequelize": "^4.28.3",
+    "@types/validator": "^10.11.1",
+    "typescript": "^3.5.2"
+  }
+}

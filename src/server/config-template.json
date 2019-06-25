@@ -1,0 +1,55 @@
+{
+    "db": {
+        "dialect": "mysql",
+        "host": "localhost",
+        "database": "node-log-notify",
+        "username": "root",
+        "password": "nokta",
+        "logging": true,
+        "port": 4306
+    },
+    "sendMailOptions": {
+        "nodeMailerTransportOptions": {
+            "host": "mail.simplinx.com",
+            "port": 465,
+            "secure": true,
+            "auth": {
+                "user": "moderator@simplinx.com",
+                "pass": "nkmRo82N6kPCiimMKw"
+            }
+        },
+        "from": "node-log-watch",
+        "defaultTo": "doganmurat@gmail.com",
+        "defaultSubject": "Process Notification"
+    },
+    "processList": [
+        {
+            "name": "app-1",
+            "processManagerType": "pm2",
+            "process2Watch": "app-1",
+            "notifyOnRestart": {
+                "enable": true,
+                "when2Notify": "immediately",
+                "maxMessagePerDay": 10
+            },
+            "notifyOnFailure": {
+                "enable": true,
+                "when2Notify": "immediately",
+                "maxMessagePerDay": 10
+            },
+            "logWatchList": [
+                {
+                    "text2Watch": "Line:10",
+                    "lineCount2RecordBefore": 2,
+                    "lineCount2RecordAfter": 3,
+                    "when2Notify": "immediately",
+                    "maxMessagePerDay": 10,
+                    "mailOptions": {
+                        "messagePrefix": "Lineeeeee",
+                        "subject": "Error Message"
+                    }
+                }
+            ]
+        }
+    ]
+}

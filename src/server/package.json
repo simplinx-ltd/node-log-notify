@@ -1,0 +1,29 @@
+{
+  "name": "node-log-notify",
+  "version": "0.0.1",
+  "description": "Watch App Logs & Notify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "https://github.com/simplinx-ltd/node-log-notify",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simplinx-ltd/node-log-notify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/simplinx-ltd/node-log-notify/issues"
+  },
+  "author": "SimpLinx",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "log4js": "^4.3.1",
+    "mysql2": "^1.6.5",
+    "nodemailer": "^6.2.1",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.8.12",
+    "sequelize-typescript": "^1.0.0-beta.3"
+  }
+}
