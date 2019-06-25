@@ -8,6 +8,7 @@
     "build-server": "NODE_ENV=production node build-scripts/build-server.js",
     "watch": "NODE_ENV=development node build-scripts/watch-server.js & node build-scripts/watch-ui.js",
     "watch-server": "node build-scripts/watch-server.js",
+    "publish":"npm run build && npm publish build",
     "git": "git add . --all; git commit; git push"
   },
   "keywords": [],

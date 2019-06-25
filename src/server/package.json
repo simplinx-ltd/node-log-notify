@@ -1,12 +1,18 @@
 {
   "name": "node-log-notify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Watch App Logs & Notify",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "simplinx",
+    "log",
+    "log-watch",
+    "process-watch",
+    "keymetrics"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/simplinx-ltd/node-log-notify",
   "repository": {

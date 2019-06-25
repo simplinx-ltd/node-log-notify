@@ -18,5 +18,6 @@ try {
 
 // Copy other files
 execSync('cd src/server; cp package*.json ../../build ', { stdio: 'inherit' });
+execSync('cp README.md LICENSE ./build ', { stdio: 'inherit' });
 
 console.log('>>       Building Server - END             <<');
