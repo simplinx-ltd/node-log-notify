@@ -2,27 +2,27 @@
 Watch & Report Process Log.
 
 ## Installation
-> install
+### install
 
 ``` sudo npm i node-log-notify -g ```
 
-> Test Command Line
+### Test Command Line
 
 ``` node-log-notify --version ```
 
-> Command Line Options
+### Command Line Options
 
 ``` node-log-notify --help ```
 
-> Extract Config File Template
+### Extract Config File Template
 
 ``` node-log-notify -x config.json ```
 
-> Edit config.json
+### Edit config.json
 
 ``` nano config.json ```
 
-> Start App
+### Start App
 
 ``` node-log-notify -c config.json ```
 
