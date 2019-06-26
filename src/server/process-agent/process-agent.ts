@@ -3,7 +3,7 @@ import * as log4js from 'log4js';
 import { ChildProcess } from 'child_process';
 const logger = log4js.getLogger('PROCESS-AGENT');
 
-const LOG_ARCHIVE_LENGTH = 101;  // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
+const LOG_ARCHIVE_LENGTH = 41;  // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
 
 export enum When {
     immediately = 'immediately',
@@ -19,11 +19,13 @@ export interface IProcess {
         enable: boolean;
         when2Notify: When;
         maxMessagePerDay: number;
+        includeInDailyReport: boolean;
     };
     notifyOnFailure: {
         enable: boolean;
         when2Notify: When;
         maxMessagePerDay: number;
+        includeInDailyReport: boolean;
     };
     logWatchList: ILogWatch[];
 };
@@ -34,6 +36,7 @@ interface ILogWatch {
     lineCount2RecordAfter: number;   // How many lines after text2Watch found will be recorded ( & send by email)
     when2Notify: When;
     maxMessagePerDay: number;
+    includeInDailyReport: boolean;
     mailOptions: {
         messagePrefix: string;
         subject: string;
@@ -41,13 +44,16 @@ interface ILogWatch {
 };
 
 export interface INotification {
+    processName: string;
+    text2Watch: string | null;
     type: 'log-notify' | 'restart' | 'failure';
     to: string;
     from: string;
     subject: string;
-    when2Notify: When,
-    maxMessagePerDay: number,
-    message: string
+    when2Notify: When;
+    includeInDailyReport: boolean;
+    maxMessagePerDay: number;
+    message: string;
 };
 
 export interface IProcessInfo {
@@ -149,12 +155,15 @@ export abstract class ProcessAgent {
                 message.replace(/(\r\n|\n|\r)/gm, '');
 
                 this.newNotificationCb({
+                    processName: this.processConfig.name,
+                    text2Watch: foundLogWatch.text2Watch,
                     type: 'log-notify',
                     from: null,
                     to: null,
                     subject: foundLogWatch.mailOptions.subject,
                     message: message,
                     when2Notify: foundLogWatch.when2Notify,
+                    includeInDailyReport: foundLogWatch.includeInDailyReport,
                     maxMessagePerDay: foundLogWatch.maxMessagePerDay
                 });
             }

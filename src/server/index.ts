@@ -55,7 +55,7 @@ exitIfArgumentNotExists('--config-file', program.configFile, logger);
 logger.info('App Starting...');
 logger.info('Loading config...');
 config
-    .load(path.resolve(__dirname, program.configFile))
+    .load(path.resolve(program.configFile))
     .then(() => {
         const configData = config.get();
 
@@ -85,28 +85,34 @@ config
                             processConfig,
                             (notification) => {
                                 // Log Notification
-                                createNotification(
-                                    notification.type,
-                                    notification.when2Notify,
-                                    notification.maxMessagePerDay,
-                                    notification.to || configData.sendMailOptions.defaultTo,
-                                    notification.from || configData.sendMailOptions.from,
-                                    notification.subject || configData.sendMailOptions.defaultSubject,
-                                    notification.message
-                                );
+                                createNotification({
+                                    processName: processConfig.name,
+                                    text2Watch: notification.text2Watch,
+                                    type: notification.type,
+                                    when2Notify: notification.when2Notify,
+                                    includeInDailyReport: notification.includeInDailyReport,
+                                    maxMessagePerDay: notification.maxMessagePerDay,
+                                    emailTo: notification.to || configData.sendMailOptions.defaultTo,
+                                    emailFrom: notification.from || configData.sendMailOptions.from,
+                                    emailSubject: notification.subject || configData.sendMailOptions.defaultSubject,
+                                    message: notification.message
+                                });
                             },
                             (info) => {
                                 // Process Info & Process status
                                 if (info.notification) {
-                                    createNotification(
-                                        info.notification.type,
-                                        info.notification.when2Notify,
-                                        info.notification.maxMessagePerDay,
-                                        info.notification.to || configData.sendMailOptions.defaultTo,
-                                        info.notification.from || configData.sendMailOptions.from,
-                                        info.notification.subject || configData.sendMailOptions.defaultSubject,
-                                        info.notification.message
-                                    );
+                                    createNotification({
+                                        processName:  processConfig.name,
+                                        text2Watch: info.notification.text2Watch,
+                                        type: info.notification.type,
+                                        when2Notify: info.notification.when2Notify,
+                                        includeInDailyReport: info.notification.includeInDailyReport,
+                                        maxMessagePerDay: info.notification.maxMessagePerDay,
+                                        emailTo: info.notification.to || configData.sendMailOptions.defaultTo,
+                                        emailFrom: info.notification.from || configData.sendMailOptions.from,
+                                        emailSubject: info.notification.subject || configData.sendMailOptions.defaultSubject,
+                                        message: info.notification.message
+                                    });
                                 }
 
                                 let timestamp = new Date();

@@ -1,4 +1,5 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize, } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 import notification from './notification';
 import resourceMemory from './resource-memory';
 import resourceCpu from './resource-cpu';

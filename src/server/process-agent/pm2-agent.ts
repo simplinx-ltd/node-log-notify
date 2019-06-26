@@ -60,11 +60,14 @@ export default class Pm2Agent extends ProcessAgent {
                             if (this.processConfig.notifyOnRestart.enable &&
                                 prevRestartCount < pList[i].pm2_env.restart_time) {
                                 info.notification = {
+                                    processName: this.processConfig.name,
+                                    text2Watch: null,
                                     type: 'restart',
-                                    from: null,
-                                    to: null,
-                                    subject: null,
+                                    from: null,     // Will be filled with default
+                                    to: null,       // Will be filled with default
+                                    subject: null,  // Will be filled with default
                                     when2Notify: this.processConfig.notifyOnRestart.when2Notify,
+                                    includeInDailyReport: this.processConfig.notifyOnRestart.includeInDailyReport,
                                     maxMessagePerDay: this.processConfig.notifyOnRestart.maxMessagePerDay,
                                     message: `${new Date().toUTCString()}: ${this.processConfig.name} restarted ${pList[i].pm2_env.restart_time - prevRestartCount} times in 10 sec.`
                                 };
@@ -76,11 +79,14 @@ export default class Pm2Agent extends ProcessAgent {
                                 prevStatus == pList[i].pm2_env.status &&
                                 prevRestartCount == pList[i].pm2_env.restart_time) {
                                 info.notification = {
+                                    processName: this.processConfig.name,
+                                    text2Watch: null,
                                     type: 'failure',
-                                    from: null,
-                                    to: null,
-                                    subject: null,
+                                    from: null,     // Will be filled with default
+                                    to: null,       // Will be filled with default
+                                    subject: null,  // Will be filled with default
                                     when2Notify: this.processConfig.notifyOnFailure.when2Notify,
+                                    includeInDailyReport: this.processConfig.notifyOnFailure.includeInDailyReport,
                                     maxMessagePerDay: this.processConfig.notifyOnFailure.maxMessagePerDay,
                                     message: `${new Date().toUTCString()}: ${this.processConfig.name} Failed`
                                 };

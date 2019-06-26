@@ -20,8 +20,9 @@ const configTemplate = `{
         },
         "from": "node-log-watch",
         "defaultTo": "xxx@gmail.com",
-        "defaultSubject": "Process Notification"
-    },
+        "defaultSubject": "Process Notification",
+        "sendDailyReport":true
+    },    
     "processList": [
         {
             "name": "app-1",
@@ -30,12 +31,14 @@ const configTemplate = `{
             "notifyOnRestart": {
                 "enable": true,
                 "when2Notify": "immediately",
-                "maxMessagePerDay": 10
+                "maxMessagePerDay": 10,
+                "includeInDailyReport":true
             },
             "notifyOnFailure": {
                 "enable": true,
                 "when2Notify": "immediately",
-                "maxMessagePerDay": 10
+                "maxMessagePerDay": 10,
+                "includeInDailyReport":true
             },
             "logWatchList": [
                 {
@@ -44,6 +47,7 @@ const configTemplate = `{
                     "lineCount2RecordAfter": 5,
                     "when2Notify": "immediately",
                     "maxMessagePerDay": 10,
+                    "includeInDailyReport":true,
                     "mailOptions": {
                         "messagePrefix": "Critical Error Occured",
                         "subject": "Need Help: Critical Error"

@@ -12,16 +12,41 @@ export default class Notification extends Model<Notification> {
   id: number;
 
   @Column({
+    type: DataType.STRING(128),
+    allowNull: false
+  })
+  processName: string;
+
+  @Column({
+    type: DataType.STRING(32),
+    defaultValue: 'NEW',
+    allowNull: false
+  })
+  status: string;
+
+  @Column({
     type: DataType.STRING(32),
     allowNull: false
   })
   type: string;
 
   @Column({
+    type: DataType.STRING(512)
+  })
+  text2Watch: string;
+
+  @Column({
     type: DataType.STRING(32),
     allowNull: false
   })
   when2Notify: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: true,
+    allowNull: false
+  })
+  includeInDailyReport: boolean;
 
   @Column({
     type: DataType.INTEGER,

@@ -8,6 +8,7 @@ export interface IConfig {
         from: string;
         defaultTo: string;
         defaultSubject: string;
+        sendDailyReport: boolean;
     },
     processList: IProcess[]
 };
