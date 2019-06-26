@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as path from 'path';
 import * as  sequelize from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';

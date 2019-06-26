@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-        "outDir": "../../build",
-        "allowJs": true,
+        "outDir": "../../build",        
         "target": "es2015",
         "module": "commonjs",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "declaration": true
     },
     "include": [
         "./**/*"
