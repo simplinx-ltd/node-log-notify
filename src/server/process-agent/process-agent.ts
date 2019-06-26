@@ -3,7 +3,7 @@ import * as log4js from 'log4js';
 import { ChildProcess } from 'child_process';
 const logger = log4js.getLogger('PROCESS-AGENT');
 
-const LOG_ARCHIVE_LENGTH = 41;  // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
+const LOG_ARCHIVE_LENGTH = 101;  // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
 
 export enum When {
     immediately = 'immediately',
@@ -59,6 +59,7 @@ export interface IProcessInfo {
 };
 
 export abstract class ProcessAgent {
+    protected PROCESS_INFO_UPDATE_CYCLE = 30 * 1000;
     protected processConfig: IProcess = null;
     protected newNotificationCb: (notification: INotification) => void = null;
     protected newProcessInfoCb: (info: IProcessInfo) => void = null;

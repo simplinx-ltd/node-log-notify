@@ -1,25 +1,25 @@
-{
+const configTemplate = `{
     "db": {
         "dialect": "mysql",
         "host": "localhost",
         "database": "node-log-notify",
-        "username": "root",
-        "password": "nokta",
-        "logging": true,
-        "port": 4306
+        "username": "node-log-notify",
+        "password": "PASS",
+        "logging": false,
+        "port": 3306
     },
     "sendMailOptions": {
         "nodeMailerTransportOptions": {
-            "host": "mail.simplinx.com",
+            "host": "mail.example.com",
             "port": 465,
             "secure": true,
             "auth": {
-                "user": "moderator@simplinx.com",
-                "pass": "nkmRo82N6kPCiimMKw"
+                "user": "node-log-notify@example.com",
+                "pass": "PASSWORD"
             }
         },
         "from": "node-log-watch",
-        "defaultTo": "doganmurat@gmail.com",
+        "defaultTo": "xxx@gmail.com",
         "defaultSubject": "Process Notification"
     },
     "processList": [
@@ -39,17 +39,19 @@
             },
             "logWatchList": [
                 {
-                    "text2Watch": "Line:10",
-                    "lineCount2RecordBefore": 2,
-                    "lineCount2RecordAfter": 3,
+                    "text2Watch": "Critical Error",
+                    "lineCount2RecordBefore": 10,
+                    "lineCount2RecordAfter": 5,
                     "when2Notify": "immediately",
                     "maxMessagePerDay": 10,
                     "mailOptions": {
-                        "messagePrefix": "Lineeeeee",
-                        "subject": "Error Message"
+                        "messagePrefix": "Critical Error Occured",
+                        "subject": "Need Help: Critical Error"
                     }
                 }
             ]
         }
     ]
-}
+}`;
+
+export default configTemplate;

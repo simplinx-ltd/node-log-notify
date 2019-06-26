@@ -19,6 +19,6 @@ export function initialize(nodeMailerTransportOptions: any) {
 function start() {
     setInterval(() => {
         // Check if we have mail to send cyclicly
-
+        
     }, CHECK_INTERVAL);
 }

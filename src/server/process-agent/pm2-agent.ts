@@ -103,7 +103,7 @@ export default class Pm2Agent extends ProcessAgent {
                     logger.error(e);
                 }
             });
-        }, 10 * 1000);
+        }, this.PROCESS_INFO_UPDATE_CYCLE);
 
     }
 

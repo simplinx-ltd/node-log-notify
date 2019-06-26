@@ -25,6 +25,7 @@ program.name('node-log-watch');
 program.version(pkg.version, '-v, --version');
 program.option('-l, --log-level <log-level>', 'Log Level (trace,debug,info,warn,error,fatal)', 'info');
 program.option('-c, --config-file <config-file>', 'Config File Path');
+program.option('-x, --extract-config-file-template <path>', 'Extract Template Config File to Path');
 program.parse(process.argv);
 
 // Configure Logger
@@ -33,7 +34,21 @@ log4js.configure({
     categories: { default: { appenders: ['console'], level: program.logLevel } }
 });
 
-// Check arguments
+// Extract Config File
+if (program.extractConfigFileTemplate) {
+    try {
+        config.extractConfigTemplateAsFile(path.resolve(program.extractConfigFileTemplate));
+        logger.info('Config file extracted successfully.');
+        logger.info('Exiting...');
+        process.exit(0);
+    } catch (e) {
+        logger.fatal(e);
+        logger.fatal('Exiting...');
+        process.exit(-1);
+    }
+}
+
+// Check arguments consistency
 exitIfArgumentNotExists('--config-file', program.configFile, logger);
 
 // Start
