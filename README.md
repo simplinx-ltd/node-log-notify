@@ -1,5 +1,9 @@
 # Log Notify #
-Watch & Report Process Log.
+* Report Process Restart
+* Report Process Failure
+* Watch Process Output/Log 
+* Notification e-mails
+* Daily Report
 
 ## Installation
 ### install
@@ -26,13 +30,12 @@ Watch & Report Process Log.
 
 ``` node-log-notify -c config.json ```
 
-## Start App with pm2
+### Start App with pm2
 ``` pm2 start node-log-notify -- -c config.json ```
 
-##
 
 ## License
 MIT
 
 
-## SimpLinx
+#### [SimpLinx](https://www.simplinx.com)
