@@ -144,9 +144,10 @@ export abstract class ProcessAgent {
                 let maxLineCount = Math.round(LOG_ARCHIVE_LENGTH / 2) - 1;
                 let lineCount2RecordBefore = (foundLogWatch.lineCount2RecordBefore || 1) > maxLineCount ? maxLineCount : foundLogWatch.lineCount2RecordBefore || 1;
                 let lineCount2RecordAfter = (foundLogWatch.lineCount2RecordAfter || 1) > maxLineCount ? maxLineCount : foundLogWatch.lineCount2RecordAfter || 1;
-                for (let j = logLineIndex + lineCount2RecordBefore; j >= logLineIndex; j--) {
+                for (let j = logLineIndex + lineCount2RecordBefore; j > logLineIndex; j--) {
                     message += `${this.logArchieve[j].timestamp} : ${this.logArchieve[j].text} <br/>`;
                 }
+                message += `<b>${this.logArchieve[logLineIndex].timestamp} : ${this.logArchieve[logLineIndex].text} </b><br/>`;
                 for (let j = logLineIndex - 1; j >= logLineIndex - lineCount2RecordAfter; j--) {
                     message += `${this.logArchieve[j].timestamp} : ${this.logArchieve[j].text} <br/>`;
                 }

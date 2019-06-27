@@ -1,8 +1,8 @@
 const configTemplate = `{
     "webOptions": {
-        "port": 8085;
-        "username": "user";
-        "password": "PASSWORD";
+        "port": 8085,
+        "username": "user",
+        "password": "PASSWORD"
     },
     "db": {
         "dialect": "mysql",

@@ -63,7 +63,6 @@ function start() {
                                     html: row.message
                                 })
                                     .then((info) => {
-                                        logger.info(info)
                                         logger.info(`Message Sent. id:${row.id} processName:${row.processName} type:${row.type}.`);
                                         setNotificationStatus(row.id, NotificationStatus.SENT)
                                             .then(() => { })
