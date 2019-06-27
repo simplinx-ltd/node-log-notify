@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { ModelRestApi } from './api.rest';
 import { authMiddleware } from './auth';
-import Model from '../db/models/resource-cpu';
+import Model from '../db/models/resource-memory';
 import { Sequelize } from 'sequelize-typescript';
 
 export default function (connection: Sequelize): express.Router {
