@@ -13,7 +13,7 @@ export function createNotification(values: Object): Promise<boolean> {
     });
 }
 
-export function getNotifications(where: WhereOptions, limit: number): Promise<Notification[]> {
+export function getNotifications(where: WhereOptions, limit?: number): Promise<Notification[]> {
     return new Promise<Notification[]>((resolve, reject) => {
         Notification.findAll({
             where,
@@ -46,6 +46,23 @@ export function setNotificationStatus(id: number, status: string): Promise<boole
         Notification.update({ status }, { where: { id } })
             .then((result) => {
                 return resolve(true);
+            })
+            .catch((e) => {
+                return reject(e);
+            });
+    });
+}
+
+export function getProcessList(where: WhereOptions): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+        Notification.findAll({
+            where,
+            attributes: ['processName']
+        })
+            .then((rows) => {
+                let list: string[] = [];
+                rows.forEach((row) => { list.push(row.processName) });
+                return resolve(list);
             })
             .catch((e) => {
                 return reject(e);

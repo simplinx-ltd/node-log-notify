@@ -84,7 +84,7 @@ config
                 initHttpServer(configData, connection, server, app);
 
                 // initialize mail-agent
-                initMailAgent(configData.sendMailOptions.nodeMailerTransportOptions);
+                initMailAgent(configData);
 
                 // initialize process-agents
                 initProcessAgent(configData);
@@ -131,9 +131,9 @@ function exitIfArgumentNotExists(argvName: string, argvValue: string | null, log
     }
 }
 
-function initMailAgent(nodeMailerTransportOptions: any) {
+function initMailAgent(_configData: IConfig) {
     try {
-        mailAgent.initialize(nodeMailerTransportOptions);
+        mailAgent.initialize(_configData.sendMailOptions.nodeMailerTransportOptions, _configData.sendMailOptions.defaultTo, _configData.sendMailOptions.from);
     } catch (e) {
         logger.fatal('Could not initialize mail agent.');
         logger.fatal(e);

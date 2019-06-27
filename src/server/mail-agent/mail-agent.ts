@@ -2,11 +2,13 @@ import * as nodeMailer from 'nodemailer';
 import * as nodeSchedule from 'node-schedule';
 import * as log4js from 'log4js';
 import { Op } from 'sequelize';
-import { getNotifications, getNotificationsCount, setNotificationStatus } from '../db/notification';
+import { getNotifications, getNotificationsCount, setNotificationStatus, getProcessList } from '../db/notification';
 import { When } from '../process-agent/process-agent';
 const logger = log4js.getLogger('MAIL');
 
 let isInitialized: boolean = false;
+let defaultTo: string;
+let defaultFrom: string;
 const CHECK_INTERVAL = 10 * 1000;
 let mailTransport: nodeMailer.Transporter = null;
 
@@ -16,12 +18,24 @@ export enum NotificationStatus {
     OMIT = 'OMIT'
 }
 
-export function initialize(nodeMailerTransportOptions: any) {
+interface IDailyReport {
+    [index: string]: {
+        restartCount: number;
+        failureCount: number;
+        notificationList: {
+            [index: string]: number
+        }
+    }
+}
+
+export function initialize(nodeMailerTransportOptions: any, _defaultTo: string, _defaultFrom: string) {
     if (isInitialized)
         return logger.warn('Already initialized. Omitting.');
 
-    logger.trace('Initializing....');
+    logger.info('Initializing....');
     mailTransport = nodeMailer.createTransport(nodeMailerTransportOptions);
+    defaultTo = _defaultTo;
+    defaultFrom = _defaultFrom;
 
     start();
 }
@@ -89,8 +103,83 @@ function start() {
             });
     }, CHECK_INTERVAL);
 
-    // Daily Job at 22:00
-    nodeSchedule.scheduleJob('00 22 * * *', () => {
+    // Daily Job at 00:05
+    nodeSchedule.scheduleJob('05 00 * * *', () => {
+        logger.info('Generating daily report');
+        let dt = new Date();
+        let startDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1));
+        let endDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 23, 59, 59));
 
+        let report: IDailyReport = {}
+        getNotifications({
+            createdAt: {
+                [Op.gte]: startDate,
+                [Op.lte]: endDate
+            }
+        })
+            .then((rows) => {
+                for (let i = 0; i < rows.length; i++) {
+                    let row = rows[i];
+                    if (!report[row.processName])
+                        report[row.processName] = {
+                            restartCount: 0,
+                            failureCount: 0,
+                            notificationList: {}
+                        }
+                    switch (row.type) {
+                        case 'restart':
+                            report[row.processName].restartCount++;
+                            break;
+                        case 'failure':
+                            report[row.processName].failureCount++;
+                            break;
+                        case 'log-notify':
+                            if (!report[row.processName].notificationList[row.text2Watch])
+                                report[row.processName].notificationList[row.text2Watch] = 0;
+                            report[row.processName].notificationList[row.text2Watch]++;
+                            break;
+                    }
+                }
+
+                // Generate Report
+                let message: string = `<h3>Daily Report - node-log-notify</h3> <hr/>`;
+                Object.keys(report).forEach((key) => {
+                    message += `<h4>Process Name: ${key}</h4>`;
+                    message += '<p>';
+                    message += `Restart Count: ${report[key].restartCount}<br/>`;
+                    message += `Failure Count: ${report[key].failureCount}<br/>`;
+
+                    Object.keys(report[key].notificationList).forEach((keyN) => {
+                        message += `${keyN}(text2Watch): ${report[key].notificationList[keyN]}<br/>`;
+                    });
+
+                    message += '</p>';
+                    message += '<br/>';
+                });
+                // Strip '\n'
+                message.replace(/(\r\n|\n|\r)/gm, '');
+
+                logger.debug(`Daily Report: ${message}`);
+
+                // Send Mail
+                mailTransport.sendMail({
+                    to: defaultTo,
+                    from: defaultFrom,
+                    subject: 'Daily Report - node-log-notify',
+                    html: message
+                })
+                    .then((info) => {
+                        logger.info(`Daily Report sent.`);
+                    })
+                    .catch((e) => {
+                        logger.error('Error occured: sendMail(daily)');
+                        logger.error(e);
+                    })
+
+            })
+            .catch((e) => {
+                logger.error('Error occured: getNotifications(daily)');
+                logger.error(e);
+            });
     });
 }
