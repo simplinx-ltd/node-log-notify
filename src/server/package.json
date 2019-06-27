@@ -1,6 +1,6 @@
 {
   "name": "node-log-notify",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Watch App Logs & Notify",
   "main": "index.js",
   "scripts": {
