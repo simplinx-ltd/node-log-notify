@@ -26,6 +26,9 @@ Watch & Report Process Log.
 
 ``` node-log-notify -c config.json ```
 
+## Start App with pm2
+``` pm2 start node-log-notify -- -c config.json ```
+
 ##
 
 ## License
