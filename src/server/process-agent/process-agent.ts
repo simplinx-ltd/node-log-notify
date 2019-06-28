@@ -74,6 +74,10 @@ export abstract class ProcessAgent {
         text: string;
         timestamp: string;
     }[] = [];
+    protected totalLogLineCount: number = 0;
+    protected lastCreatedNotification: {
+        [text2Watch: string]: number
+    } = {};
 
     constructor(processConfig: IProcess,
         newNotificationCb: (values: any) => void,
@@ -119,9 +123,15 @@ export abstract class ProcessAgent {
         if (!logLine)
             return;
 
+        this.totalLogLineCount++;
+
         for (let i = 0; i < this.processConfig.logWatchList.length; i++) {
-            if (logLine.text.toLowerCase().indexOf(this.processConfig.logWatchList[i].text2Watch.toLowerCase()) >= 0) {
+            // If we found text &&
+            // We didn't send it as a part of prev notification (see->lineCount2RecordAfter)
+            if (logLine.text.toLowerCase().indexOf(this.processConfig.logWatchList[i].text2Watch.toLowerCase()) >= 0 &&
+                (this.totalLogLineCount > ((this.lastCreatedNotification[this.processConfig.logWatchList[i].text2Watch] || 0) + this.processConfig.logWatchList[i].lineCount2RecordAfter))) {
                 let foundLogWatch = this.processConfig.logWatchList[i];
+                this.lastCreatedNotification[foundLogWatch.text2Watch] = this.totalLogLineCount;
                 logger.info(`Creating new notification...`);
                 logger.info(`text2Watch: ${foundLogWatch.text2Watch}`);
 
@@ -145,11 +155,11 @@ export abstract class ProcessAgent {
                 let lineCount2RecordBefore = (foundLogWatch.lineCount2RecordBefore || 1) > maxLineCount ? maxLineCount : foundLogWatch.lineCount2RecordBefore || 1;
                 let lineCount2RecordAfter = (foundLogWatch.lineCount2RecordAfter || 1) > maxLineCount ? maxLineCount : foundLogWatch.lineCount2RecordAfter || 1;
                 for (let j = logLineIndex + lineCount2RecordBefore; j > logLineIndex; j--) {
-                    message += `${this.logArchieve[j].timestamp} : ${this.logArchieve[j].text} <br/>`;
+                    message += `${this.logArchieve[j].text || '-'} <br/>`;
                 }
-                message += `<b>${this.logArchieve[logLineIndex].timestamp} : ${this.logArchieve[logLineIndex].text} </b><br/>`;
+                message += `<b>${this.logArchieve[logLineIndex].text} </b><br/>`;
                 for (let j = logLineIndex - 1; j >= logLineIndex - lineCount2RecordAfter; j--) {
-                    message += `${this.logArchieve[j].timestamp} : ${this.logArchieve[j].text} <br/>`;
+                    message += `${this.logArchieve[j].text} <br/>`;
                 }
 
                 // Strip '\n'

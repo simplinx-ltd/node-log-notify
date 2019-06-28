@@ -59,6 +59,7 @@ export default class Pm2Agent extends ProcessAgent {
 
                             if (this.processConfig.notifyOnRestart.enable &&
                                 prevRestartCount < pList[i].pm2_env.restart_time) {
+                                logger.info(`${this.processConfig.name}: Process restart detected. Creating notification.`);
                                 info.notification = {
                                     processName: this.processConfig.name,
                                     text2Watch: null,
@@ -78,6 +79,7 @@ export default class Pm2Agent extends ProcessAgent {
                                 prevStatus !== 'online' &&
                                 prevStatus == pList[i].pm2_env.status &&
                                 prevRestartCount == pList[i].pm2_env.restart_time) {
+                                logger.info(`${this.processConfig.name}: Process failure detected. Creating notification.`);
                                 info.notification = {
                                     processName: this.processConfig.name,
                                     text2Watch: null,
