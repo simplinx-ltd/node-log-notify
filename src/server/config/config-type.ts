@@ -1,7 +1,7 @@
 import { SequelizeOptions } from 'sequelize-typescript';
-import { IProcess } from "../process-agent/process-agent";
+import { Process } from '../process-agent/process-agent';
 
-export interface IConfig {
+export interface Config {
     webOptions: {
         port: number;
         username: string;
@@ -9,11 +9,12 @@ export interface IConfig {
     };
     db: SequelizeOptions;
     sendMailOptions: {
-        nodeMailerTransportOptions: any;    // see nodemailer.createTransport
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        nodeMailerTransportOptions: any; // see nodemailer.createTransport
         from: string;
         defaultTo: string;
         defaultSubject: string;
         sendDailyReport: boolean;
     };
-    processList: IProcess[];
-};
+    processList: Process[];
+}

@@ -1,14 +1,13 @@
 import * as fs from 'fs';
 import configTemplate from './config-template';
-import { IConfig } from './config-type';
+import { Config } from './config-type';
 
-let config: IConfig = null;
+let config: Config = null;
 
 export function load(filePath: string): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-        fs.readFile(filePath, (err, content) => {
-            if (err)
-                return reject(err);
+    return new Promise<boolean>((resolve, reject): void => {
+        fs.readFile(filePath, (err, content): void => {
+            if (err) return reject(err);
 
             try {
                 config = JSON.parse(content.toString());
@@ -21,10 +20,10 @@ export function load(filePath: string): Promise<boolean> {
     });
 }
 
-export function get(): IConfig {
+export function get(): Config {
     return config;
 }
 
-export function extractConfigTemplateAsFile(filePath: string) {
+export function extractConfigTemplateAsFile(filePath: string): void {
     fs.writeFileSync(filePath, configTemplate);
 }

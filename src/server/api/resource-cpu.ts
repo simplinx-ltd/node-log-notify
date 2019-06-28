@@ -4,7 +4,7 @@ import { authMiddleware } from './auth';
 import Model from '../db/models/resource-cpu';
 import { Sequelize } from 'sequelize-typescript';
 
-export default function (connection: Sequelize): express.Router {
+export default function api(connection: Sequelize): express.Router {
     let router: express.Router = express.Router();
     let DbModel = Model;
     let modelApi = new ModelRestApi(DbModel, connection);

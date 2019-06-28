@@ -1,20 +1,16 @@
 import ResourceMemory from './models/resource-memory';
 
-export function createResourceMemory(
-    timestamp: Date,
-    process: string,
-    value: number
-): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+export function createResourceMemory(timestamp: Date, process: string, value: number): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject): void => {
         ResourceMemory.create({
             timestamp,
             process,
-            value
+            value,
         })
-            .then(() => {
+            .then((): void => {
                 return resolve(true);
             })
-            .catch((e) => {
+            .catch((e): void => {
                 return reject(e);
             });
     });

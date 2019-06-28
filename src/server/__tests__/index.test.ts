@@ -1,5 +1,5 @@
-describe("This is a simple test", () => {
-    test("Check the sampleFunction function", () => {
-        expect(1+2).toEqual(3);
+describe('This is a simple test', (): void => {
+    test('Check the sampleFunction function', (): void => {
+        expect(1 + 2).toEqual(3);
     });
 });

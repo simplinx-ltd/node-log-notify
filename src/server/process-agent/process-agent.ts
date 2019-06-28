@@ -3,15 +3,15 @@ import * as log4js from 'log4js';
 import { ChildProcess } from 'child_process';
 const logger = log4js.getLogger('PROCESS-AGENT');
 
-const LOG_ARCHIVE_LENGTH = 41;  // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
+const LOG_ARCHIVE_LENGTH = 41; // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
 
 export enum When {
     immediately = 'immediately',
     daily = 'daily',
-    all = 'all'
-};
+    all = 'all',
+}
 
-export interface IProcess {
+export interface Process {
     name: string;
     processManagerType: 'pm2';
     process2Watch: string;
@@ -27,13 +27,13 @@ export interface IProcess {
         maxMessagePerDay: number;
         includeInDailyReport: boolean;
     };
-    logWatchList: ILogWatch[];
-};
+    logWatchList: LogWatch[];
+}
 
-interface ILogWatch {
+interface LogWatch {
     text2Watch: string;
-    lineCount2RecordBefore: number;  // How many lines before text2Watch found will be recorded ( & send by email)
-    lineCount2RecordAfter: number;   // How many lines after text2Watch found will be recorded ( & send by email)
+    lineCount2RecordBefore: number; // How many lines before text2Watch found will be recorded ( & send by email)
+    lineCount2RecordAfter: number; // How many lines after text2Watch found will be recorded ( & send by email)
     when2Notify: When;
     maxMessagePerDay: number;
     includeInDailyReport: boolean;
@@ -41,9 +41,9 @@ interface ILogWatch {
         messagePrefix: string;
         subject: string;
     };
-};
+}
 
-export interface INotification {
+export interface Notification {
     processName: string;
     text2Watch: string | null;
     type: 'log-notify' | 'restart' | 'failure';
@@ -54,21 +54,21 @@ export interface INotification {
     includeInDailyReport: boolean;
     maxMessagePerDay: number;
     message: string;
-};
+}
 
-export interface IProcessInfo {
+export interface ProcessInfo {
     status: string;
     restartCount: number;
     memory: number;
     cpu: number;
-    notification?: INotification
-};
+    notification?: Notification;
+}
 
 export abstract class ProcessAgent {
     protected PROCESS_INFO_UPDATE_CYCLE = 30 * 1000;
-    protected processConfig: IProcess = null;
-    protected newNotificationCb: (notification: INotification) => void = null;
-    protected newProcessInfoCb: (info: IProcessInfo) => void = null;
+    protected processConfig: Process = null;
+    protected newNotificationCb: (notification: Notification) => void = null;
+    protected newProcessInfoCb: (info: ProcessInfo) => void = null;
     protected logListenerApp: ChildProcess = null;
     protected logArchieve: {
         text: string;
@@ -76,12 +76,14 @@ export abstract class ProcessAgent {
     }[] = [];
     protected totalLogLineCount: number = 0;
     protected lastCreatedNotification: {
-        [text2Watch: string]: number
+        [text2Watch: string]: number;
     } = {};
 
-    constructor(processConfig: IProcess,
-        newNotificationCb: (values: any) => void,
-        newProcessInfoCb: (info: IProcessInfo) => void) {
+    public constructor(
+        processConfig: Process,
+        newNotificationCb: (values: Notification) => void,
+        newProcessInfoCb: (info: ProcessInfo) => void,
+    ) {
         assert(processConfig, 'Needed Parameter');
         assert(newNotificationCb, 'Needed Parameter');
         assert(newProcessInfoCb, 'Needed Parameter');
@@ -94,48 +96,50 @@ export abstract class ProcessAgent {
     protected abstract watchProcessLogOutput(): void;
     protected abstract watchProcessInfo(): void;
 
-    start() {
+    public start(): void {
         this.watchProcessLogOutput();
         this.watchProcessInfo();
     }
 
-    protected newLogLine(logLine: string, timestamp: string) {
+    protected newLogLine(logLine: string, timestamp: string): void {
         this.archieveLogLine(logLine, timestamp);
         this.processLogLine(); // Process 21. log-line Item
     }
 
-    protected newProcessInfo(info: IProcessInfo) {
+    protected newProcessInfo(info: ProcessInfo): void {
         this.newProcessInfoCb(info);
     }
 
-    protected archieveLogLine(text: string, timestamp: string) {
-        if (this.logArchieve.length >= LOG_ARCHIVE_LENGTH)
-            this.logArchieve.pop();
+    protected archieveLogLine(text: string, timestamp: string): void {
+        if (this.logArchieve.length >= LOG_ARCHIVE_LENGTH) this.logArchieve.pop();
         this.logArchieve.unshift({ text, timestamp });
         logger.trace(`Adding new log line: '${timestamp}' : '${text}'`);
     }
 
-    protected processLogLine() {
+    protected processLogLine(): void {
         const logLineIndex = Math.round(LOG_ARCHIVE_LENGTH / 2) - 1;
         let logLine = this.logArchieve[logLineIndex];
 
         // Not filled yet
-        if (!logLine)
-            return;
+        if (!logLine) return;
 
         this.totalLogLineCount++;
 
         for (let i = 0; i < this.processConfig.logWatchList.length; i++) {
             // If we found text &&
             // We didn't send it as a part of prev notification (see->lineCount2RecordAfter)
-            if (logLine.text.toLowerCase().indexOf(this.processConfig.logWatchList[i].text2Watch.toLowerCase()) >= 0 &&
-                (this.totalLogLineCount > ((this.lastCreatedNotification[this.processConfig.logWatchList[i].text2Watch] || 0) + this.processConfig.logWatchList[i].lineCount2RecordAfter))) {
+            if (
+                logLine.text.toLowerCase().indexOf(this.processConfig.logWatchList[i].text2Watch.toLowerCase()) >= 0 &&
+                this.totalLogLineCount >
+                    (this.lastCreatedNotification[this.processConfig.logWatchList[i].text2Watch] || 0) +
+                        this.processConfig.logWatchList[i].lineCount2RecordAfter
+            ) {
                 let foundLogWatch = this.processConfig.logWatchList[i];
                 this.lastCreatedNotification[foundLogWatch.text2Watch] = this.totalLogLineCount;
                 logger.info(`Creating new notification...`);
                 logger.info(`text2Watch: ${foundLogWatch.text2Watch}`);
 
-                let message: string = `
+                let message = `
                 <h5>Notification Message - Node-Log-Notify </h5>
                 <hr/>
                 <p>
@@ -152,8 +156,14 @@ export abstract class ProcessAgent {
                 `;
 
                 let maxLineCount = Math.round(LOG_ARCHIVE_LENGTH / 2) - 1;
-                let lineCount2RecordBefore = (foundLogWatch.lineCount2RecordBefore || 1) > maxLineCount ? maxLineCount : foundLogWatch.lineCount2RecordBefore || 1;
-                let lineCount2RecordAfter = (foundLogWatch.lineCount2RecordAfter || 1) > maxLineCount ? maxLineCount : foundLogWatch.lineCount2RecordAfter || 1;
+                let lineCount2RecordBefore =
+                    (foundLogWatch.lineCount2RecordBefore || 1) > maxLineCount
+                        ? maxLineCount
+                        : foundLogWatch.lineCount2RecordBefore || 1;
+                let lineCount2RecordAfter =
+                    (foundLogWatch.lineCount2RecordAfter || 1) > maxLineCount
+                        ? maxLineCount
+                        : foundLogWatch.lineCount2RecordAfter || 1;
                 for (let j = logLineIndex + lineCount2RecordBefore; j > logLineIndex; j--) {
                     message += `${this.logArchieve[j].text || '-'} <br/>`;
                 }
@@ -175,7 +185,7 @@ export abstract class ProcessAgent {
                     message: message,
                     when2Notify: foundLogWatch.when2Notify,
                     includeInDailyReport: foundLogWatch.includeInDailyReport,
-                    maxMessagePerDay: foundLogWatch.maxMessagePerDay
+                    maxMessagePerDay: foundLogWatch.maxMessagePerDay,
                 });
             }
         }
