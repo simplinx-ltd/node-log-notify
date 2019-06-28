@@ -70,7 +70,7 @@ export default class Pm2Agent extends ProcessAgent {
                                     when2Notify: this.processConfig.notifyOnRestart.when2Notify,
                                     includeInDailyReport: this.processConfig.notifyOnRestart.includeInDailyReport,
                                     maxMessagePerDay: this.processConfig.notifyOnRestart.maxMessagePerDay,
-                                    message: `${new Date().toUTCString()}: ${this.processConfig.name} restarted ${pList[i].pm2_env.restart_time - prevRestartCount} times in 10 sec.`
+                                    message: `${new Date().toUTCString()}: ${this.processConfig.name} restarted ${pList[i].pm2_env.restart_time - prevRestartCount} times in ${this.PROCESS_INFO_UPDATE_CYCLE / 1000} sec.`
                                 };
                             }
 
