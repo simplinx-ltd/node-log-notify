@@ -3,11 +3,12 @@
   "version": "0.0.6",
   "description": "Watch App Logs & Notify",
   "scripts": {
-    "start": "NODE_ENV=development node build/app.js",
+    "start": "NODE_ENV=development node build/index.js",
     "build": "NODE_ENV=production node build-scripts/build.js",
     "build-server": "NODE_ENV=production node build-scripts/build-server.js",
     "watch": "NODE_ENV=development node build-scripts/watch-server.js & node build-scripts/watch-ui.js",
     "watch-server": "node build-scripts/watch-server.js",
+    "watch-ui": "node build-scripts/watch-ui.js",
     "publish": "npm run lint && npm run build && npm publish build",
     "lint": "eslint src/server/**/*.ts",
     "git": "git add . --all; git commit; git push",
