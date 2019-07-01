@@ -161,6 +161,12 @@ function start(): void {
                     message += '</p>';
                     message += '<br/>';
                 });
+
+                // Empty Report
+                if (Object.keys(report).length <= 0) {
+                    message += 'Nothing to Report';
+                }
+
                 // Strip '\n'
                 message.replace(/(\r\n|\n|\r)/gm, '');
 
