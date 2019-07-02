@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap, map, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { tap, map, catchError } from 'rxjs/operators';
 
 export class UserService {
 
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient, private router: Router) { }
 
 	isLoggedIn(): boolean {
 		if (localStorage.getItem('auth') == '1' && localStorage.getItem('token') !== null) {
@@ -47,6 +48,7 @@ export class UserService {
 
 	logout(): void {
 		this.clearToken();
+		this.router.navigate(['login']);
 	}
 
 }

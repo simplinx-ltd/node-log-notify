@@ -1,1 +1,13 @@
-<p>dashboard works!</p>
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<canvas ngChartjs [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+						[legend]="lineChartLegend" [chartType]="lineChartType" [inlinePlugins]="inlinePlugin">
+					</canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

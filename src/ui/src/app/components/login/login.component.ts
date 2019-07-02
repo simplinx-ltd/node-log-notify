@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 			password: this.loginForm.value['passwordCtrl'],
 			rememberMe: this.loginForm.value['rememberMeCtrl']
 		};
-		this.userService.login(loginData).subscribe(res => {
+		this.userService.login(loginData).subscribe((res: ILoginResponse) => {
 			this.userService.setToken(res.token);
 			this.router.navigate(['']);			
 		}, err => {
@@ -54,4 +54,8 @@ interface ILoginData {
 	username: string,
 	password: string,
 	rememberMe: boolean
+}
+
+interface ILoginResponse {
+	token: string
 }
