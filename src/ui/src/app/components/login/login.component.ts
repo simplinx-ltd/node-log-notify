@@ -1,29 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from 'src/app/services/login.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
 
-	dd: any = null;
+	loginForm: FormGroup;
+	loginErr: String;
 
-	constructor(private loginService: LoginService) { }
-
+	constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
 
 	ngOnInit() {
-		this.test();
+		this.checkIsLoggedIn();
+		this.initForm();
 	}
 
-
-	test():void {
-		this.loginService.getSomeData().subscribe(x => {
-			console.log('#-------------------#');
-			console.log(x);
-			console.log('#-------------------#');
-		})
+	initForm(): void {
+		this.loginForm = this.formBuilder.group({
+			usernameCtrl: ['', Validators.required],
+			passwordCtrl: ['', Validators.required],
+			rememberMeCtrl: [false]
+		});
 	}
 
+	onSubmit(): void {
+		this.loginErr = null;
+		const loginData: ILoginData = {
+			username: this.loginForm.value['usernameCtrl'],
+			password: this.loginForm.value['passwordCtrl'],
+			rememberMe: this.loginForm.value['rememberMeCtrl']
+		};
+		this.userService.login(loginData).subscribe(res => {
+			this.userService.setToken(res.token);
+			this.router.navigate(['']);			
+		}, err => {
+			this.loginErr = err.statusText;
+		});
+	}
+
+	checkIsLoggedIn(): void {
+		if (this.userService.isLoggedIn()) this.router.navigate(['']);
+	}
+	
+}
+
+interface ILoginData {
+	username: string,
+	password: string,
+	rememberMe: boolean
 }

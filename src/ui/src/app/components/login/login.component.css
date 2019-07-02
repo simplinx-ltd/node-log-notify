@@ -2,14 +2,14 @@
 	border: 1px solid #ccc;
 	margin: 0 auto;
 	max-width: 470px;
-	margin-top: 47px;
+	margin-top: 15%;
+	border-radius: 5px;
 }
 
 form {
 	width: 100%;
 	height: 100%;
 	padding: 20px;
-
 }
 
 .logo {
@@ -17,7 +17,7 @@ form {
 	height: auto;
 	margin: 0 auto;
 	text-align: center;
-	padding: 0px 0px 20px 0;
+	padding: 10px 0px 30px 0;
 }
 
 .logo > a > img {
@@ -29,4 +29,8 @@ form {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+}
+
+#errorText {
+	color: red !important;
 }

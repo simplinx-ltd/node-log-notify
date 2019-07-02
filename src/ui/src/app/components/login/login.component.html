@@ -1,27 +1,29 @@
 <div class="container">
 	<div class="row">
 		<div class="formContainer col-md-6">
-			<form>
+			<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 				<div class="logo">
-					<a href="#"><img src="assets/images/simplinxLogo.png" alt=""></a>
+					<a href="#"><img src="assets/images/nlnIcon.png" alt=""></a>
 				</div>
 				<div class="form-group">
-					<label for="emailInput">Email Address</label>
-					<input type="email" class="form-control" id="emailInput" aria-describedby="emailError"
-						placeholder="Email">
-					<small id="emailError" class="form-text text-muted">Invalid E-Mail</small>
+					<label for="usernameInput">Username</label>
+					<input type="text" formControlName="usernameCtrl" class="form-control" id="usernameInput"
+						placeholder="Username">
 				</div>
 				<div class="form-group">
 					<label for="passwordInput">Password</label>
-					<input type="password" class="form-control" id="passwordInput" placeholder="Password">
+					<input type="password" formControlName="passwordCtrl" class="form-control" id="passwordInput"
+						placeholder="Password">
 				</div>
 				<div class="form-group formFooter">
 					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="rememberMe">
+						<input type="checkbox" formControlName="rememberMeCtrl" class="form-check-input"
+							id="rememberMe">
 						<label class="form-check-label" for="rememberMe">Remember Me</label>
 					</div>
-					<button type="button" class="btn btn-primary">Login</button>
+					<button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
 				</div>
+				<small id="errorText" class="form-text" *ngIf="loginErr">{{loginErr}}. Please check your informations and try again.</small>
 			</form>
 		</div>
 	</div>
