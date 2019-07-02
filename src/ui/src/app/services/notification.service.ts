@@ -15,7 +15,7 @@ export class NotificationService {
 	constructor(private httpClient: HttpClient, private userService: UserService) { }
 
 	getNotificationAll() {
-		this.httpClient.get('/api/notification', {
+		return this.httpClient.get('/api/notification', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -27,7 +27,7 @@ export class NotificationService {
 	}
 
 	getNotificationCount() {
-		this.httpClient.get('/api/notification/count', {
+		return this.httpClient.get('/api/notification/count', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -39,7 +39,7 @@ export class NotificationService {
 	}
 
 	getNotificationById(id: number) {
-		this.httpClient.get('/api/notification/' + id, {
+		return this.httpClient.get('/api/notification/' + id, {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}

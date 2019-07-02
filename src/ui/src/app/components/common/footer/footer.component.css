@@ -4,7 +4,7 @@ footer {
 	border-top: 1px solid #ccc;
 	text-align: center;
 	padding: 10px 0px; 
-	position: absolute;
+	position: static !important;
 	bottom: 0;
 }
 

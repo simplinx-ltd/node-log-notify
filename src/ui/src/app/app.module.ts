@@ -12,7 +12,10 @@ import { HeaderComponent } from './components/common/header/header.component';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { NotificationDetailComponent } from './components/notification/notification-detail/notification-detail.component';
+import { ResourceComponent } from './components/resource/resource.component';
+import { ResourceDetailComponent } from './components/resource/resource-detail/resource-detail.component';
 
 @NgModule({
 	declarations: [
@@ -22,7 +25,10 @@ import { NotificationsComponent } from './components/notifications/notifications
 		FooterComponent,
 		LayoutComponent,
 		DashboardComponent,
-		NotificationsComponent
+		NotificationComponent,
+		NotificationDetailComponent,
+		ResourceComponent,
+		ResourceDetailComponent
 	],
 	imports: [
 		BrowserModule,

@@ -14,8 +14,8 @@ export class ResourceService {
 
 	constructor(private httpClient: HttpClient, private userService: UserService) { }
 
-	getCpuAll() {
-		this.httpClient.get('/api/resource-cpu', {
+	getCPUAll(): Observable<Object> {
+		return this.httpClient.get('/api/resource-cpu', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -26,8 +26,8 @@ export class ResourceService {
 			);
 	}
 
-	getCpuCount() {
-		this.httpClient.get('/api/resource-cpu/count', {
+	getCPUCount(): Observable<Object> {
+		return this.httpClient.get('/api/resource-cpu/count', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -38,8 +38,8 @@ export class ResourceService {
 			);
 	}
 
-	getCpuById(id: number) {
-		this.httpClient.get('/api/resource-cpu/' + id, {
+	getCPUById(id: number): Observable<Object> {
+		return this.httpClient.get('/api/resource-cpu/' + id, {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -50,8 +50,8 @@ export class ResourceService {
 			);
 	}
 
-	getMemoryAll() {
-		this.httpClient.get('/api/resource-memory', {
+	getMemoryAll(): Observable<Object> {
+		return this.httpClient.get('/api/resource-memory', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -62,8 +62,8 @@ export class ResourceService {
 			);
 	}
 
-	getMemoryCount() {
-		this.httpClient.get('/api/resource-memory/count', {
+	getMemoryCount(): Observable<Object> {
+		return this.httpClient.get('/api/resource-memory/count', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
@@ -74,8 +74,8 @@ export class ResourceService {
 			);
 	}
 
-	getMemoryById(id: number) {
-		this.httpClient.get('/api/resource-memory/' + id, {
+	getMemoryById(id: number): Observable<Object> {
+		return this.httpClient.get('/api/resource-memory/' + id, {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
