@@ -51,7 +51,7 @@ export class ResourceService {
 	}
 
 	getMemoryAll() {
-		this.httpClient.get('/api/resource-cpu', {
+		this.httpClient.get('/api/resource-memory', {
 			headers: {
 				'x-access-token': this.userService.getToken()
 			}
