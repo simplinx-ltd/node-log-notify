@@ -18,6 +18,8 @@ import { NotificationDetailComponent } from './components/notification/notificat
 import { ResourceComponent } from './components/resource/resource.component';
 import { ResourceDetailComponent } from './components/resource/resource-detail/resource-detail.component';
 import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
+import { ConfigComponent } from './components/config/config.component';
+import { ProcessListComponent } from './components/config/process-list/process-list.component';
 
 @NgModule({
 	declarations: [
@@ -30,7 +32,9 @@ import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
 		NotificationComponent,
 		NotificationDetailComponent,
 		ResourceComponent,
-		ResourceDetailComponent
+		ResourceDetailComponent,
+		ConfigComponent,
+		ProcessListComponent
 	],
 	imports: [
 		BrowserModule,
