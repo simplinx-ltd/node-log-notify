@@ -27,7 +27,7 @@ export class NotificationComponent implements OnInit {
 
 }
 
-interface INotification {
+export interface INotification {
 	id: number,
 	createdAt: Date,
 	emailFrom: string,

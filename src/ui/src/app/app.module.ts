@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { NgChartjsModule } from 'ng-chartjs';
 
@@ -36,7 +37,8 @@ import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
 		AppRoutingModule,
 		HttpClientModule,
 		ReactiveFormsModule,
-		NgChartjsModule.registerPlugin([])
+		NgChartjsModule.registerPlugin([]),
+		FormsModule
 	],
 	providers: [{
 		provide: HTTP_INTERCEPTORS,

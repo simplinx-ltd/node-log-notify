@@ -1,1 +1,82 @@
-<p>notification-detail works!</p>
+<div class="container" *ngIf="dataLoaded | async">
+	<div class="row">
+		<h2 class="title">{{notificationData.processName}} Notification Details</h2>
+		<form class="col-lg-12">
+			<div class="form-row">
+				<div class="form-group col-md-1">
+					<label for="id">ID</label>
+					<input type="text" class="form-control" id="id" placeholder="ID" value="{{notificationData.id}}" readonly>
+				</div>
+				<div class="form-group col-md-5">
+					<label for="processName">Process Name</label>
+					<input type="text" class="form-control" id="processName" placeholder="Process Name"
+						value="{{notificationData.processName}}" readonly>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="type">Type</label>
+					<input type="text" class="form-control" id="type" placeholder="Type"
+						value="{{notificationData.type}}" readonly>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="status">Status</label>
+					<input type="text" class="form-control" id="status" placeholder="Status"
+						value="{{notificationData.status}}" readonly>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="createdAt">Created At</label>
+					<input type="text" class="form-control" id="createdAt" placeholder="Created At"
+						value="{{notificationData.createdAt | date:'medium'}}" readonly>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="createdAt">Updated At</label>
+					<input type="text" class="form-control" id="updatedAt" placeholder="Updated At"
+						value="{{notificationData.updatedAt | date:'medium'}}" readonly>
+				</div>
+			</div>
+			<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="includeInDailyReport">Include In Daily Report</label>
+						<input type="text" class="form-control" id="includeInDailyReport" value="{{notificationData.includeInDailyReport}}" readonly>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="maxMessagePerDay">Max Message Per Day</label>
+						<input type="text" class="form-control" id="maxMessagePerDay" value="{{notificationData.maxMessagePerDay}}" readonly>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="text2Watch">Text to Watch</label>
+						<input type="text" class="form-control" id="text2Watch" value="{{notificationData.text2Watch}}" readonly>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="when2Notify">When to Notify</label>
+						<input type="text" class="form-control" id="when2Notify" value="{{notificationData.when2Notify}}" readonly>
+					</div>
+				</div>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="emailTo">E-Mail To</label>
+					<input type="text" class="form-control" id="emailTo" value={{notificationData.emailTo}} readonly>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="emailFrom">E-Mail From</label>
+					<input type="text" class="form-control" id="emailFrom" value={{notificationData.emailFrom}} readonly>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					<label for="emailSubject">E-Mail Subject</label>
+					<input type="text" class="form-control" id="emailSubject" value="{{notificationData.emailSubject}}" readonly>
+				</div>
+				<div class="form-group col-md-12">
+					<label for="messsage">Message</label>
+					<textarea class="col-md-12 form-control" name="message" id="message" readonly>{{notificationData.message}}</textarea>
+				</div>
+			</div>
+			
+			<a routerLink="/notification" class="btn btn-primary" style="color: #fafafa;">Back</a>
+		</form>
+	</div>
+</div>

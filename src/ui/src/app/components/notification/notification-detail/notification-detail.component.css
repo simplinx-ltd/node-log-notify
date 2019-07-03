@@ -1,0 +1,14 @@
+.container {
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+h2.title {
+	padding: 20px 15px;
+}
+
+form {
+	border: 1px solid #ccc;
+	padding: 30px;
+	border-radius: 5px;
+}
