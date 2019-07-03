@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -16,6 +16,7 @@ import { NotificationComponent } from './components/notification/notification.co
 import { NotificationDetailComponent } from './components/notification/notification-detail/notification-detail.component';
 import { ResourceComponent } from './components/resource/resource.component';
 import { ResourceDetailComponent } from './components/resource/resource-detail/resource-detail.component';
+import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
 
 @NgModule({
 	declarations: [
@@ -37,7 +38,11 @@ import { ResourceDetailComponent } from './components/resource/resource-detail/r
 		ReactiveFormsModule,
 		NgChartjsModule.registerPlugin([])
 	],
-	providers: [],
+	providers: [{
+		provide: HTTP_INTERCEPTORS,
+		useClass: HttpAuthTokenInterceptor,
+		multi: true
+	}],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
