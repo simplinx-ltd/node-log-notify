@@ -9,7 +9,6 @@ import { ResourceComponent } from './components/resource/resource.component';
 import { ResourceDetailComponent } from './components/resource/resource-detail/resource-detail.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationDetailComponent } from './components/notification/notification-detail/notification-detail.component';
-import { ConfigComponent } from './components/config/config.component';
 
 const routes: Routes = [
 	{
@@ -36,10 +35,6 @@ const routes: Routes = [
 			{
 				path: 'notification/:id',
 				component: NotificationDetailComponent
-			},
-			{
-				path: 'config',
-				component: ConfigComponent
 			},
 			{
 				path: '**',

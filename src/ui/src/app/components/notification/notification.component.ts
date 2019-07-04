@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+
 import { NotificationService } from 'src/app/services/notification.service';
 
+declare var $;
 @Component({
 	selector: 'app-notification',
 	templateUrl: './notification.component.html',
@@ -8,19 +10,28 @@ import { NotificationService } from 'src/app/services/notification.service';
 })
 
 export class NotificationComponent implements OnInit {
+	@ViewChild('dataTable', { static: false }) table;
+
+	dataTable: any;
+
 	notificationData: INotification[] = [];
 	nDataLoaded: Promise<boolean>;
 
-	constructor(private notificationService: NotificationService) { }
+	constructor(private notificationService: NotificationService, private chRef: ChangeDetectorRef) { }
 
-	ngOnInit() {
-		this.getAllNotifications();
+	async ngOnInit(): Promise<void> {
+		await this.getAllNotifications();
 	}
 
 	getAllNotifications(): void {
 		this.notificationService.getNotificationAll()
 			.subscribe((data: INotification[]) => {
 				this.notificationData = data;
+
+				this.chRef.detectChanges();
+
+				this.dataTable = $(this.table.nativeElement);
+				this.dataTable.dataTable();
 				this.nDataLoaded = Promise.resolve(true);
 			});
 	}

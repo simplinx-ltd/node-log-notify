@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 
 import { NgChartjsModule } from 'ng-chartjs';
+import { DataTablesModule } from 'angular-datatables';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -18,8 +19,6 @@ import { NotificationDetailComponent } from './components/notification/notificat
 import { ResourceComponent } from './components/resource/resource.component';
 import { ResourceDetailComponent } from './components/resource/resource-detail/resource-detail.component';
 import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
-import { ConfigComponent } from './components/config/config.component';
-import { ProcessListComponent } from './components/config/process-list/process-list.component';
 
 @NgModule({
 	declarations: [
@@ -33,8 +32,6 @@ import { ProcessListComponent } from './components/config/process-list/process-l
 		NotificationDetailComponent,
 		ResourceComponent,
 		ResourceDetailComponent,
-		ConfigComponent,
-		ProcessListComponent
 	],
 	imports: [
 		BrowserModule,
@@ -42,7 +39,8 @@ import { ProcessListComponent } from './components/config/process-list/process-l
 		HttpClientModule,
 		ReactiveFormsModule,
 		NgChartjsModule.registerPlugin([]),
-		FormsModule
+		FormsModule,
+		DataTablesModule
 	],
 	providers: [{
 		provide: HTTP_INTERCEPTORS,

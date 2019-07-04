@@ -1,35 +1,34 @@
-<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-
-<div class="container" *ngIf="nDataLoaded | async">
+<div class="container">
 	<div class="row">
 		<h2 class="title">Notifications</h2>
-		<table class="table" *ngIf="notificationData.length > 0; else noData">
-			<thead>
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">Process Name</th>
-					<th scope="col">E-Mail to</th>
-					<th scope="col">Type</th>
-					<th scope="col">Status</th>
-					<th scope="col">When to Notify</th>
-					<th scope="col">Created At</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let notify of notificationData">
-					<th><a routerLink="{{notify.id}}">{{notify.id}}</a></th>
-					<td><a routerLink="{{notify.id}}">{{notify.processName}}</a></td>
-					<td><a routerLink="{{notify.id}}">{{notify.emailTo}}</a></td>
-					<td><a routerLink="{{notify.id}}">{{notify.type}}</a></td>
-					<td><a routerLink="{{notify.id}}">{{notify.status}}</a></td>
-					<td><a routerLink="{{notify.id}}">{{notify.when2Notify}}</a></td>
-					<td><a routerLink="{{notify.id}}">{{notify.createdAt | date:'M/d/yy h:mm:ss a'}}</a></td>
-				</tr>
-			</tbody>
-		</table>
-		<ng-template #noData class="container">
-			<div class="alert alert-warning col-lg-12">Notifications Not Found</div>
-		</ng-template>
+		<div class="col-lg-12">
+			<table #dataTable class="row-border hover" *ngIf="notificationData.length > 0; else noData">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Process Name</th>
+						<th>E-Mail to</th>
+						<th>Type</th>
+						<th>Status</th>
+						<th>When to Notify</th>
+						<th>Created At</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let notify of notificationData">
+						<td><a routerLink="{{notify.id}}">{{notify.id}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.processName}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.emailTo}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.type}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.status}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.when2Notify}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.createdAt | date:'M/d/yy h:mm:ss a'}}</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<ng-template #noData class="container">
+				<div class="alert alert-warning col-lg-12">Notifications Not Found</div>
+			</ng-template>
+		</div>
 	</div>
 </div>
