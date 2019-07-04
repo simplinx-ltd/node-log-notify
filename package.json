@@ -55,12 +55,5 @@
     "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.2"
-  },
-  "dependencies": {
-    "datatables.net": "^1.10.19",
-    "datatables.net-bs4": "^1.10.19",
-    "datatables.net-dt": "^1.10.19",
-    "jquery": "^3.4.1",
-    "save-dev": "^2.0.0"
   }
 }
