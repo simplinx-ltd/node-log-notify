@@ -27,12 +27,11 @@ export class NotificationComponent implements OnInit {
 		this.notificationService.getNotificationAll()
 			.subscribe((data: INotification[]) => {
 				this.notificationData = data;
+				this.nDataLoaded = Promise.resolve(true);
 
 				this.chRef.detectChanges();
-
 				this.dataTable = $(this.table.nativeElement);
 				this.dataTable.dataTable();
-				this.nDataLoaded = Promise.resolve(true);
 			});
 	}
 

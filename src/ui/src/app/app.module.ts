@@ -40,7 +40,7 @@ import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
 		ReactiveFormsModule,
 		NgChartjsModule.registerPlugin([]),
 		FormsModule,
-		DataTablesModule
+		DataTablesModule,
 	],
 	providers: [{
 		provide: HTTP_INTERCEPTORS,

@@ -2,7 +2,8 @@
 	<div class="row">
 		<h2 class="title">Notifications</h2>
 		<div class="col-lg-12">
-			<table #dataTable class="row-border hover" *ngIf="notificationData.length > 0; else noData">
+			<div class="alert alert-warning" *ngIf="!nDataLoaded">Loading..</div>
+			<table #dataTable #showTable class="row-border hover" *ngIf="nDataLoaded">
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -26,9 +27,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<ng-template #noData class="container">
-				<div class="alert alert-warning col-lg-12">Notifications Not Found</div>
-			</ng-template>
 		</div>
 	</div>
 </div>
