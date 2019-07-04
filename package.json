@@ -12,7 +12,8 @@
     "publish": "npm run lint && npm run build && npm publish build",
     "lint": "eslint src/server/**/*.ts",
     "git": "git add . --all; git commit; git push",
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "keywords": [],
   "license": "MIT",

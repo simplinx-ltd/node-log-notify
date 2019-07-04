@@ -7,7 +7,10 @@ let config: Config = null;
 export function load(filePath: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject): void => {
         fs.readFile(filePath, (err, content): void => {
-            if (err) return reject(err);
+            if (err) {
+                config = null;
+                return reject(err);
+            }
 
             try {
                 config = JSON.parse(content.toString());
