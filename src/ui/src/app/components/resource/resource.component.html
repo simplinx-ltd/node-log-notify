@@ -1,0 +1,29 @@
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<div class="title col-lg-12" style="display: flex; justify-content: space-between;">
+				<h2>Resources</h2>
+				<div class="filter">
+					<label for="filter" style="font-size: 20px; padding: 0px 10px;">Filter By Date</label>
+					<input type="date" id="filter" name="filter" name="filterDate" value="{{filterDate}}" (change)="onChange($event)">
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-body">
+					<div class="chartContainer">
+						<h2 class="chartTitle">Memory Chart</h2>
+						<div id="memoryChartDiv" style="width: 100%; height: 500px"></div>
+					</div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-body">
+					<div class="chartContainer">
+						<h2 class="chartTitle">CPU Chart</h2>
+						<div id="cpuChartDiv" style="width: 100%; height: 500px"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
