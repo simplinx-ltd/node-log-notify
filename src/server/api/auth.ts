@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import * as jsonwebtoken from 'jsonwebtoken';
 import * as log4js from 'log4js';
 import * as Debug from 'debug';
-import { ApiError } from './api.error';
+import { ApiError } from 'sx-sequelize-api';
 
 // Logger
 const logger = log4js.getLogger('API-AUTH');

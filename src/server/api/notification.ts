@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { ModelRestApi } from './api.rest';
+import { ModelRestApi } from 'sx-sequelize-api';
 import { authMiddleware } from './auth';
 import Model from '../db/models/notification';
 import { Sequelize } from 'sequelize-typescript';
