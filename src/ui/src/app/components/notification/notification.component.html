@@ -1,0 +1,32 @@
+<div class="container">
+	<div class="row">
+		<h2 class="title">Notifications</h2>
+		<div class="col-lg-12">
+			<div class="alert alert-warning" *ngIf="!nDataLoaded">Loading..</div>
+			<table #dataTable #showTable class="row-border hover" *ngIf="nDataLoaded">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Process Name</th>
+						<th>E-Mail to</th>
+						<th>Type</th>
+						<th>Status</th>
+						<th>When to Notify</th>
+						<th>Created At</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let notify of notificationData">
+						<td><a routerLink="{{notify.id}}">{{notify.id}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.processName}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.emailTo}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.type}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.status}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.when2Notify}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.createdAt | date:'M/d/yy h:mm:ss a'}}</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
