@@ -5,15 +5,15 @@ import Model from '../db/models/notification';
 import { Sequelize } from 'sequelize-typescript';
 
 export default function api(connection: Sequelize): express.Router {
-	let router: express.Router = express.Router();
-	let DbModel = Model;
-	let modelApi = new ModelRestApi(DbModel, connection);
+    let router: express.Router = express.Router();
+    let DbModel = Model;
+    let modelApi = new ModelRestApi(DbModel, connection);
 
-	router.use(authMiddleware());
+    router.use(authMiddleware());
 
-	router.get('/', modelApi.getAll());
-	router.get('/count', modelApi.count());
-	router.get('/:id', modelApi.getById());
+    router.get('/', modelApi.getAll());
+    router.get('/count', modelApi.count());
+    router.get('/:id', modelApi.getById());
 
-	return router;
+    return router;
 }
