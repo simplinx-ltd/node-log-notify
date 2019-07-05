@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 
 import { NotificationService } from 'src/app/services/notification.service';
+import { TitleService } from 'src/app/services/title.service';
 
 declare var $;
 @Component({
@@ -17,9 +18,10 @@ export class NotificationComponent implements OnInit {
 	notificationData: INotification[] = [];
 	nDataLoaded: Promise<boolean>;
 
-	constructor(private notificationService: NotificationService, private chRef: ChangeDetectorRef) { }
+	constructor(private notificationService: NotificationService, private chRef: ChangeDetectorRef, private titleService: TitleService) { }
 
 	async ngOnInit(): Promise<void> {
+		this.titleService.setTitle('Node Log Notify - Notifications');
 		await this.getAllNotifications();
 	}
 

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid" style="padding: 2%">
 	<div class="row">
 		<h2 class="title">Notifications</h2>
 		<div class="col-lg-12">
@@ -8,22 +8,36 @@
 					<tr>
 						<th>ID</th>
 						<th>Process Name</th>
-						<th>E-Mail to</th>
 						<th>Type</th>
 						<th>Status</th>
 						<th>When to Notify</th>
+						<th>E-Mail to</th>
+						<th>E-Mail From</th>
+						<th>E-Mail Subject</th>
+						<th>Include in Daily Report</th>
+						<th>Max Message Per Day</th>
+						<th>Message</th>
+						<th>Text to Watch</th>
 						<th>Created At</th>
+						<th>Updated At</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr *ngFor="let notify of notificationData">
 						<td><a routerLink="{{notify.id}}">{{notify.id}}</a></td>
 						<td><a routerLink="{{notify.id}}">{{notify.processName}}</a></td>
-						<td><a routerLink="{{notify.id}}">{{notify.emailTo}}</a></td>
 						<td><a routerLink="{{notify.id}}">{{notify.type}}</a></td>
 						<td><a routerLink="{{notify.id}}">{{notify.status}}</a></td>
 						<td><a routerLink="{{notify.id}}">{{notify.when2Notify}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.emailFrom}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.emailTo}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.emailSubject}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.includeInDailyReport}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.maxMessagePerDay}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.message}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.text2Watch}}</a></td>
 						<td><a routerLink="{{notify.id}}">{{notify.createdAt | date:'M/d/yy h:mm:ss a'}}</a></td>
+						<td><a routerLink="{{notify.id}}">{{notify.updatedAt | date:'M/d/yy h:mm:ss a'}}</a></td>
 					</tr>
 				</tbody>
 			</table>

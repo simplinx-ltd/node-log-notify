@@ -6,6 +6,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 import { ResourceService } from 'src/app/services/resource.service';
 import * as bytes from 'bytes';
+import { TitleService } from 'src/app/services/title.service';
 
 am4core.useTheme(am4themes_animated);
 
@@ -22,9 +23,10 @@ export class ResourceComponent {
 	private memoryData: Array<IResourceData> = null;
 	filterDate: any;
 
-	constructor(private zone: NgZone, private resourceService: ResourceService) { }
+	constructor(private zone: NgZone, private resourceService: ResourceService, private titleService: TitleService) { }
 
 	ngOnInit() {
+		this.titleService.setTitle('Node Log Notify - Resources');
 		this.filterDate = new Date().toISOString().slice(0, 10);
 	}
 
@@ -33,7 +35,8 @@ export class ResourceComponent {
 	}
 
 	onChange(event) {
-		console.log('changed ', event.target.value);
+		this.filterDate = event.target.value;
+		this.initChart();
 	}
 
 	async getAllResources(): Promise<void> {
@@ -43,7 +46,7 @@ export class ResourceComponent {
 
 	getCPUResources(): Promise<IResourceData[]> {
 		return new Promise((resolve, reject) => {
-			this.resourceService.getCPUAll().subscribe((CPUData: Array<IResourceData>) => {
+			this.resourceService.getCPUFilterByDate(this.filterDate).subscribe((CPUData: Array<IResourceData>) => {
 				this.cpuData = CPUData.map(item => {
 					item.date = new Date(item.timestamp);
 					return item;
@@ -55,7 +58,7 @@ export class ResourceComponent {
 
 	getMemoryResources(): Promise<IResourceData[]> {
 		return new Promise((resolve, reject) => {
-			this.resourceService.getMemoryAll().subscribe((memoryData: Array<IResourceData>) => {
+			this.resourceService.getMemoryFilterByDate(this.filterDate).subscribe((memoryData: Array<IResourceData>) => {
 				this.memoryData = memoryData.map(item => {
 					item.value = bytes(item.value);
 					item.date = new Date(item.timestamp);

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { TitleService } from 'src/app/services/title.service';
 
 @Component({
 	selector: 'app-login',
@@ -14,9 +15,10 @@ export class LoginComponent implements OnInit {
 	loginForm: FormGroup;
 	loginErr: String;
 
-	constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
+	constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router, private titleService: TitleService) { }
 
 	ngOnInit() {
+		this.titleService.setTitle('Node Log Notify - Login');
 		this.checkIsLoggedIn();
 		this.initForm();
 	}
@@ -38,7 +40,7 @@ export class LoginComponent implements OnInit {
 		};
 		this.userService.login(loginData).subscribe((res: ILoginResponse) => {
 			this.userService.setToken(res.token);
-			this.router.navigate(['']);			
+			this.router.navigate(['']);
 		}, err => {
 			this.loginErr = err.statusText;
 		});
@@ -47,7 +49,7 @@ export class LoginComponent implements OnInit {
 	checkIsLoggedIn(): void {
 		if (this.userService.isLoggedIn()) this.router.navigate(['']);
 	}
-	
+
 }
 
 interface ILoginData {

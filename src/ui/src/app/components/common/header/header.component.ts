@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-header',
@@ -7,11 +8,12 @@ import { UserService } from 'src/app/services/user.service';
 	styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+	activeLink: String;
 
 	constructor(private userService: UserService) { }
 
 	ngOnInit() {
-		
+
 	}
 
 	onLogout(): void {

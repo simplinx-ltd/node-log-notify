@@ -9,11 +9,11 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a routerLink="/resource" class="nav-link">Resources <span class="sr-only">(current)</span></a>
+			<li class="nav-item">
+				<a routerLink="/resource" routerLinkActive="active" class="nav-link">Resources <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
-				<a routerLink="/notification" class="nav-link">Notifications / Reports</a>
+				<a routerLink="/notification" routerLinkActive="active" class="nav-link">Notifications / Reports</a>
 			</li>
 		</ul>
 		<a (click)="onLogout()" class="nav-link pull-right" style="color: #fafafa;">Logout</a>

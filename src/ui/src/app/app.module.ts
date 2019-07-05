@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -45,6 +45,7 @@ import { HttpAuthTokenInterceptor } from './http-auth.interceptor';
 	providers: [{
 		provide: HTTP_INTERCEPTORS,
 		useClass: HttpAuthTokenInterceptor,
+
 		multi: true
 	}],
 	bootstrap: [AppComponent]

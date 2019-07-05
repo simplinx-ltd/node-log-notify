@@ -39,7 +39,6 @@ export class NotificationDetailComponent implements OnInit {
 				if (!data) {
 					return this.router.navigate(['notification']);
 				}
-				console.log(data);
 				this.notificationData = data;
 				this.dataLoaded =  Promise.resolve(true);
 			});
