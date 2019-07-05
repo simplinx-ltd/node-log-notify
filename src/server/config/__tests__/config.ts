@@ -9,7 +9,9 @@ const unparsableFilePath = '/tmp/unparsableFilePath.json';
 describe('Config Extract, Load, Get operations', (): void => {
     test('Can extract config file', (): void => {
         expect((): void => {
-            unlinkSync(testFilePath);
+            try {
+                unlinkSync(testFilePath);
+            } catch (e) {}
             extractConfigTemplateAsFile(testFilePath);
         }).not.toThrowError();
 
@@ -17,7 +19,9 @@ describe('Config Extract, Load, Get operations', (): void => {
     });
 
     test('Can load config file', (done): void => {
-        unlinkSync(testFilePath);
+        try {
+            unlinkSync(testFilePath);
+        } catch (e) {}
         extractConfigTemplateAsFile(testFilePath);
         load(testFilePath).then((): void => {
             expect(get()).toEqual(JSON.parse(configTemplate));
