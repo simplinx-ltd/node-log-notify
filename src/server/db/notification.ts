@@ -60,10 +60,7 @@ export function getProcessList(where: WhereOptions): Promise<string[]> {
             attributes: ['processName'],
         })
             .then((rows): void => {
-                let list: string[] = [];
-                rows.forEach((row): void => {
-                    list.push(row.processName);
-                });
+                let list: string[] = rows.map(row => row.processName);
                 return resolve(list);
             })
             .catch((e): void => {

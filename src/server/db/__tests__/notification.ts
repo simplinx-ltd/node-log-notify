@@ -120,6 +120,31 @@ describe('Notification Model Operations', (): void => {
         });
     });
 
+    describe('setNotificationStatus()', (): void => {
+        test('Calls setNotificationStatus function', (done): void => {
+            let notificationModel: Notification[] = [];
+            let id: number = 1;
+            let status: string = 'EX';
+            mockedNotification.update.mockReturnValueOnce(BlueBird.resolve([1, notificationModel]));
+            setNotificationStatus(1, status).then((): void => {
+                expect(mockedNotification.update.mock.calls.length).toBe(1);
+                done();
+            });
+        });
+
+        test('Rejects on Error', (done): void => {
+            let notificationModel: Notification[] = [];
+            let id: number = 1;
+            let status: string = 'EX';
+            mockedNotification.update.mockReturnValueOnce(BlueBird.reject('Reject Error'));
+            setNotificationStatus(id, status).catch((err): void => {
+                expect(mockedNotification.update.mock.calls.length).toBe(1);
+                expect(err).toBe('Reject Error');
+                done();
+            });
+        });        
+    });
+
     describe('getProcessList', (): void => {
         test('Calls findAll function', (done): void => {
             mockedNotification.findAll.mockReturnValueOnce(BlueBird.resolve([]));
@@ -148,5 +173,5 @@ describe('Notification Model Operations', (): void => {
             });
         });
     });
-    
+
 });
