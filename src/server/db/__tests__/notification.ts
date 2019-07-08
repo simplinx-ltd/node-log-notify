@@ -119,4 +119,34 @@ describe('Notification Model Operations', (): void => {
             });
         });
     });
+
+    describe('getProcessList', (): void => {
+        test('Calls findAll function', (done): void => {
+            mockedNotification.findAll.mockReturnValueOnce(BlueBird.resolve([]));
+            getProcessList({}).then((): void => {
+                expect(mockedNotification.findAll.mock.calls.length).toBe(1);
+                done();
+            });
+        });
+
+        test('Calls findAll with Where Option', (done): void => {
+            let whereOption = { id: 1 };
+            mockedNotification.findAll.mockReturnValueOnce(BlueBird.resolve([]));
+            getProcessList(whereOption).then((): void => {
+                expect(mockedNotification.findAll.mock.calls.length).toBe(1);
+                expect(mockedNotification.findAll.mock.calls[0][0].where).toEqual(whereOption);
+                done();
+            });
+        });
+
+        test('Rejects on Error', (done): void => {
+            mockedNotification.findAll.mockReturnValueOnce(BlueBird.reject('Reject Error'));
+            getProcessList({}).catch((err): void => {
+                expect(mockedNotification.findAll.mock.calls.length).toBe(1);
+                expect(err).toBe('Reject Error');
+                done();
+            });
+        });
+    });
+    
 });
