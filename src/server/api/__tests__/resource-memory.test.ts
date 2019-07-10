@@ -4,8 +4,8 @@ import * as request from 'supertest';
 
 import api from '../resource-memory';
 
-describe('ResourceMemory Endpoint', (): void => {
-    describe('Routes /api/resource-memory', function () {
+describe('ResourceMemory Endpoints', (): void => {
+    describe('Route /api/resource-memory to getAll()', function () {
         it('respond with json', function (done) {
             let app = express;
             let fake = sinon.fake();

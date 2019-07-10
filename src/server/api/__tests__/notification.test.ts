@@ -4,8 +4,8 @@ import * as request from 'supertest';
 
 import api from '../notification';
 
-describe('Notification Endpoint', (): void => {
-    describe('Routes /api/notification', function () {
+describe('Notification Endpoints', (): void => {
+    describe('Route /api/notification to getAll()', function () {
         it('respond with json', function (done) {
             let app = express;
             let fake = sinon.fake();

@@ -4,8 +4,8 @@ import * as request from 'supertest';
 
 import api from '../resource-cpu';
 
-describe('ResourceCPU Endpoint', (): void => {
-    describe('Routes /api/resource-cpu', function () {
+describe('ResourceCPU Endpoints', (): void => {
+    describe('Route /api/resource-cpu to getAll()', function () {
         it('respond with json', function (done) {
             let app = express;
             let fake = sinon.fake();
