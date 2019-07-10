@@ -314,3 +314,5 @@ function defineErrorHandlers(_app: express.Application): void {
         });
     });
 }
+
+export default app;

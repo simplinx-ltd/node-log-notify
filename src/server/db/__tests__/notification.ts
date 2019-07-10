@@ -126,14 +126,13 @@ describe('Notification Model Operations', (): void => {
             let id: number = 1;
             let status: string = 'EX';
             mockedNotification.update.mockReturnValueOnce(BlueBird.resolve([1, notificationModel]));
-            setNotificationStatus(1, status).then((): void => {
+            setNotificationStatus(id, status).then((): void => {
                 expect(mockedNotification.update.mock.calls.length).toBe(1);
                 done();
             });
         });
 
         test('Rejects on Error', (done): void => {
-            let notificationModel: Notification[] = [];
             let id: number = 1;
             let status: string = 'EX';
             mockedNotification.update.mockReturnValueOnce(BlueBird.reject('Reject Error'));

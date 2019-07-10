@@ -1,4 +1,5 @@
 {
+  "editor.fontSize": 13,
   "eslint.validate": [
     "javascript",
     "javascriptreact",
