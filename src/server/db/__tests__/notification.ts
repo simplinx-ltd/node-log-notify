@@ -121,10 +121,10 @@ describe('Notification Model Operations', (): void => {
     });
 
     describe('setNotificationStatus()', (): void => {
-        test('Calls setNotificationStatus function', (done): void => {
+        test('Calls update function', (done): void => {
             let notificationModel: Notification[] = [];
-            let id: number = 1;
-            let status: string = 'EX';
+            let id = 1;
+            let status = 'EX';
             mockedNotification.update.mockReturnValueOnce(BlueBird.resolve([1, notificationModel]));
             setNotificationStatus(id, status).then((): void => {
                 expect(mockedNotification.update.mock.calls.length).toBe(1);
@@ -133,15 +133,15 @@ describe('Notification Model Operations', (): void => {
         });
 
         test('Rejects on Error', (done): void => {
-            let id: number = 1;
-            let status: string = 'EX';
+            let id = 1;
+            let status = 'EX';
             mockedNotification.update.mockReturnValueOnce(BlueBird.reject('Reject Error'));
             setNotificationStatus(id, status).catch((err): void => {
                 expect(mockedNotification.update.mock.calls.length).toBe(1);
                 expect(err).toBe('Reject Error');
                 done();
             });
-        });        
+        });
     });
 
     describe('getProcessList', (): void => {
@@ -172,5 +172,4 @@ describe('Notification Model Operations', (): void => {
             });
         });
     });
-
 });

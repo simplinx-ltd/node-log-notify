@@ -1,9 +1,10 @@
 import * as auth from '../auth';
+import { Request, Response } from 'express';
 import * as httpMock from 'node-mocks-http';
 import { ApiError } from 'sx-sequelize-api';
 
-let req;
-let res;
+let req: Request;
+let res: Response;
 
 beforeEach((): void => {
     req = httpMock.createRequest();
@@ -14,16 +15,16 @@ describe('Test AuthMiddleware', (): void => {
     describe('authMiddleware() Operations', (): void => {
         it('Calls authMiddleware Function with Invalid Auth Token', (done): void => {
             req.body.token = 'testToken';
-            auth.authMiddleware()(req, res, (expectedError) => {
-                let err: ApiError = ApiError.accessError('Access Denied', 401);
+            auth.authMiddleware()(req, res, (expectedError): void => {
+                let err: ApiError = ApiError.accessError();
                 expect(expectedError).toEqual(err);
                 done();
             });
         });
 
         it('Calls authMiddleware Function without Auth Token in Body', (done): void => {
-            auth.authMiddleware()(req, res, (expectedError) => {
-                let err: ApiError = ApiError.accessError('Access Denied', 401);
+            auth.authMiddleware()(req, res, (expectedError): void => {
+                let err: ApiError = ApiError.accessError();
                 expect(expectedError).toEqual(err);
                 done();
             });
@@ -48,10 +49,10 @@ describe('Test AuthMiddleware', (): void => {
             req.body.password = credentials.password;
 
             auth.setUsernamePassword(credentials);
-            auth.authLogin(req, res, next => {
+            auth.authLogin(req, res, (next): void => {
                 expect(res.statusCode).toEqual(200);
                 expect(res.statusMessage).toEqual('OK');
-                expect(next).not.toBe(ApiError.accessError('Access Denied', 401));
+                expect(next).not.toBe(ApiError.accessError());
                 done();
             });
             done();
@@ -64,28 +65,27 @@ describe('Test AuthMiddleware', (): void => {
             req.body.password = 'exPassword';
 
             auth.setUsernamePassword(credentials);
-            auth.authLogin(req, res, next => {
-                expect(next).toEqual(ApiError.accessError('Access Denied', 401));
+            auth.authLogin(req, res, (next): void => {
+                expect(next).toEqual(ApiError.accessError());
                 done();
             });
             done();
         });
 
         it('Calls authLogin Function Without  Credentials', (done): void => {
-            auth.authLogin(req, res, next => {
-                expect(next).toEqual(ApiError.accessError('Access Denied', 401));
+            auth.authLogin(req, res, (next): void => {
+                expect(next).toEqual(ApiError.accessError());
                 done();
             });
             done();
         });
 
-
         it('Calls authLogin Function Without body in Request', (done): void => {
             let credentials = { username: 'testUsername', password: 'testPassword' };
 
             auth.setUsernamePassword(credentials);
-            auth.authLogin(req, res, next => {
-                expect(next).toEqual(ApiError.accessError('Access Denied', 401));
+            auth.authLogin(req, res, (next): void => {
+                expect(next).toEqual(ApiError.accessError());
                 done();
             });
             done();
@@ -107,4 +107,4 @@ describe('Test AuthMiddleware', (): void => {
             done();
         });
     });
-})
+});

@@ -14,16 +14,17 @@ beforeEach((): void => {
 describe('ResourceMemory Model Operations', (): void => {
     describe('createResourceMemory', (): void => {
         test('Calls create function', (done): void => {
-            let createVars = {timestamp: new Date(), process: 'Moderator', value: 1}; 
+            let createVars = { timestamp: new Date(), process: 'Moderator', value: 1 };
             mockedResourcesMemory.create.mockReturnValueOnce(BlueBird.resolve());
             createResourceMemory(createVars.timestamp, createVars.process, createVars.value).then((): void => {
                 expect(mockedResourcesMemory.create.mock.calls.length).toBe(1);
+                expect(mockedResourcesMemory.create.mock.calls[0][0]).toEqual(createVars);
                 done();
-            })
+            });
         });
 
         test('Rejects on error', (done): void => {
-            let createVars = {timestamp: new Date(), process: 'Moderator', value: 1}; 
+            let createVars = { timestamp: new Date(), process: 'Moderator', value: 1 };
             mockedResourcesMemory.create.mockReturnValueOnce(BlueBird.reject('Reject Error'));
             createResourceMemory(createVars.timestamp, createVars.process, createVars.value).catch((e): void => {
                 expect(mockedResourcesMemory.create.mock.calls.length).toBe(1);

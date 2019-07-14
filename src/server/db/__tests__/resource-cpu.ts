@@ -14,16 +14,17 @@ beforeEach((): void => {
 describe('ResourceCPU Model Operations', (): void => {
     describe('createResourceCPU', (): void => {
         test('Calls create function', (done): void => {
-            let createVars = {timestamp: new Date(), process: 'appz-1', value: 1}; 
+            let createVars = { timestamp: new Date(), process: 'appz-1', value: 1 };
             mockedResourcesCPU.create.mockReturnValueOnce(BlueBird.resolve());
             createResourceCpu(createVars.timestamp, createVars.process, createVars.value).then((): void => {
                 expect(mockedResourcesCPU.create.mock.calls.length).toBe(1);
+                expect(mockedResourcesCPU.create.mock.calls[0][0]).toEqual(createVars);
                 done();
-            })
+            });
         });
 
         test('Rejects on error', (done): void => {
-            let createVars = {timestamp: new Date(), process: 'Moderator', value: 1}; 
+            let createVars = { timestamp: new Date(), process: 'Moderator', value: 1 };
             mockedResourcesCPU.create.mockReturnValueOnce(BlueBird.reject('Reject Error'));
             createResourceCpu(createVars.timestamp, createVars.process, createVars.value).catch((e): void => {
                 expect(mockedResourcesCPU.create.mock.calls.length).toBe(1);

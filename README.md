@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  A Node.js library that sends notification.
+  Generate process notifications easily.
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 </p>
 
 
-# Log Notify #
+## What can `node-log-notify` do?
 * Report Process Restart
 * Report Process Failure
 * Watch Process Output/Log
