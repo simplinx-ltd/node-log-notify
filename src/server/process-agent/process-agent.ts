@@ -2,7 +2,7 @@ import * as log4js from 'log4js';
 import { ChildProcess } from 'child_process';
 const logger = log4js.getLogger('PROCESS-AGENT');
 
-const LOG_ARCHIVE_LENGTH = 41; // lineCount2RecordBefore:  Max 20 , lineCount2RecordAfter:  Max 20
+const LOG_ARCHIVE_LENGTH = 201; // lineCount2RecordBefore:  Max 100 , lineCount2RecordAfter:  Max 100
 
 export enum When {
     immediately = 'immediately',
