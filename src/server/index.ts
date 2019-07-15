@@ -187,47 +187,7 @@ function initProcessAgent(_configData: Config): void {
     try {
         _configData.processList.forEach((processConfig): void => {
             logger.debug(`Creating process-agent: ${JSON.stringify(processConfig)}`);
-            processAgentList
-                .create(
-                    processConfig,
-                    (notification): void => {
-                        // Log Notification
-                        createNotification({
-                            processName: processConfig.name,
-                            text2Watch: notification.text2Watch,
-                            type: notification.type,
-                            when2Notify: notification.when2Notify,
-                            includeInDailyReport: notification.includeInDailyReport,
-                            maxMessagePerDay: notification.maxMessagePerDay,
-                            emailTo: notification.to || _configData.sendMailOptions.defaultTo,
-                            emailFrom: notification.from || _configData.sendMailOptions.from,
-                            emailSubject: notification.subject || _configData.sendMailOptions.defaultSubject,
-                            message: notification.message,
-                        });
-                    },
-                    (info): void => {
-                        // Process Info & Process status
-                        if (info.notification) {
-                            createNotification({
-                                processName: processConfig.name,
-                                text2Watch: info.notification.text2Watch,
-                                type: info.notification.type,
-                                when2Notify: info.notification.when2Notify,
-                                includeInDailyReport: info.notification.includeInDailyReport,
-                                maxMessagePerDay: info.notification.maxMessagePerDay,
-                                emailTo: info.notification.to || _configData.sendMailOptions.defaultTo,
-                                emailFrom: info.notification.from || _configData.sendMailOptions.from,
-                                emailSubject: info.notification.subject || _configData.sendMailOptions.defaultSubject,
-                                message: info.notification.message,
-                            });
-                        }
-
-                        let timestamp = new Date();
-                        createResourceCpu(timestamp, processConfig.name, info.cpu);
-                        createResourceMemory(timestamp, processConfig.name, info.memory);
-                    },
-                )
-                .start();
+            processAgentList.create(processConfig, createNotification, createResourceCpu, createResourceMemory).start();
         });
     } catch (e) {
         logger.fatal('Could not initialize process-agents.');

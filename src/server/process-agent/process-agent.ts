@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 import * as log4js from 'log4js';
 import { ChildProcess } from 'child_process';
 const logger = log4js.getLogger('PROCESS-AGENT');
@@ -9,6 +8,13 @@ export enum When {
     immediately = 'immediately',
     daily = 'daily',
     all = 'all',
+}
+
+export enum ProcessStatus {
+    Online,
+    Offline,
+    Failure,
+    UnKnown,
 }
 
 export interface Process {
@@ -57,18 +63,15 @@ export interface Notification {
 }
 
 export interface ProcessInfo {
-    status: string;
+    status: ProcessStatus;
     restartCount: number;
     memory: number;
     cpu: number;
-    notification?: Notification;
 }
 
 export abstract class ProcessAgent {
     protected PROCESS_INFO_UPDATE_CYCLE = 30 * 1000;
     protected processConfig: Process = null;
-    protected newNotificationCb: (notification: Notification) => void = null;
-    protected newProcessInfoCb: (info: ProcessInfo) => void = null;
     protected logListenerApp: ChildProcess = null;
     protected logArchieve: {
         text: string;
@@ -78,36 +81,49 @@ export abstract class ProcessAgent {
     protected lastCreatedNotification: {
         [text2Watch: string]: number;
     } = {};
+    ///
+    protected prevStatus = ProcessStatus.Online;
+    protected prevRestartCount = 1000 * 1000; // big number
+    protected isFailureMessageSent = false;
+
+    ///
+    private createResourceCpuCb: (timestamp: Date, process: string, value: number) => Promise<boolean>;
+    private createResourceMemoryCb: (timestamp: Date, process: string, value: number) => Promise<boolean>;
+    private createNotificationCb: (values: object) => Promise<boolean>;
 
     public constructor(
         processConfig: Process,
-        newNotificationCb: (values: Notification) => void,
-        newProcessInfoCb: (info: ProcessInfo) => void,
+        createNotificationCb: (values: object) => Promise<boolean>,
+        createResourceCpuCb: (timestamp: Date, process: string, value: number) => Promise<boolean>,
+        createResourceMemoryCb: (timestamp: Date, process: string, value: number) => Promise<boolean>,
     ) {
-        assert(processConfig, 'Needed Parameter');
-        assert(newNotificationCb, 'Needed Parameter');
-        assert(newProcessInfoCb, 'Needed Parameter');
-
         this.processConfig = processConfig;
-        this.newNotificationCb = newNotificationCb;
-        this.newProcessInfoCb = newProcessInfoCb;
+        this.createNotificationCb = createNotificationCb;
+        this.createResourceCpuCb = createResourceCpuCb;
+        this.createResourceMemoryCb = createResourceMemoryCb;
     }
 
     protected abstract watchProcessLogOutput(): void;
     protected abstract watchProcessInfo(): void;
+    protected abstract convertStatusFromStr(strStatus: string): ProcessStatus;
 
     public start(): void {
         this.watchProcessLogOutput();
         this.watchProcessInfo();
     }
 
+    private getHeaderText(): string {
+        return `<h5>Notification Message - Node-Log-Notify </h5>
+        <hr/>`;
+    }
+
+    private getFooterText(): string {
+        return `<hr/>`;
+    }
+
     protected newLogLine(logLine: string, timestamp: string): void {
         this.archieveLogLine(logLine, timestamp);
         this.processLogLine(); // Process 21. log-line Item
-    }
-
-    protected newProcessInfo(info: ProcessInfo): void {
-        this.newProcessInfoCb(info);
     }
 
     protected archieveLogLine(text: string, timestamp: string): void {
@@ -140,8 +156,7 @@ export abstract class ProcessAgent {
                 logger.info(`text2Watch: ${foundLogWatch.text2Watch}`);
 
                 let message = `
-                <h5>Notification Message - Node-Log-Notify </h5>
-                <hr/>
+                ${this.getHeaderText()}
                 <p>
                     <b>Message: </b> ${foundLogWatch.mailOptions.messagePrefix} <br/>
                     <b>text2Watch: </b> ${foundLogWatch.text2Watch} <br/>
@@ -172,10 +187,9 @@ export abstract class ProcessAgent {
                     message += `${this.logArchieve[j].text} <br/>`;
                 }
 
-                // Strip '\n'
-                message.replace(/(\r\n|\n|\r)/gm, '');
+                message += this.getFooterText();
 
-                this.newNotificationCb({
+                this.createNotificationCb({
                     processName: this.processConfig.name,
                     text2Watch: foundLogWatch.text2Watch,
                     type: 'log-notify',
@@ -189,5 +203,90 @@ export abstract class ProcessAgent {
                 });
             }
         }
+    }
+
+    protected processProcessInfo(info: ProcessInfo): void {
+        let timestamp = new Date();
+        this.createResourceCpuCb(timestamp, this.processConfig.name, info.cpu);
+        this.createResourceMemoryCb(timestamp, this.processConfig.name, info.memory);
+
+        if (this.processConfig.notifyOnRestart.enable && this.prevRestartCount < info.restartCount) {
+            logger.info(`${this.processConfig.name}: Process restart detected. Creating notification.`);
+            let notification: Notification = {
+                processName: this.processConfig.name,
+                text2Watch: null,
+                type: 'restart',
+                from: null, // Will be filled with default
+                to: null, // Will be filled with default
+                subject: null, // Will be filled with default
+                when2Notify: this.processConfig.notifyOnRestart.when2Notify,
+                includeInDailyReport: this.processConfig.notifyOnRestart.includeInDailyReport,
+                maxMessagePerDay: this.processConfig.notifyOnRestart.maxMessagePerDay,
+                message: `
+                ${this.getHeaderText()}
+                ${new Date().toUTCString()}: ${this.processConfig.name} restarted ${info.restartCount -
+                    this.prevRestartCount} times in ${this.PROCESS_INFO_UPDATE_CYCLE / 1000} sec.
+                `,
+            };
+
+            // Add Whole Log
+            notification.message += `
+            <br/>
+            <br/>
+            <h5>------  LOGS  ------ </h5>
+            <hr/>
+            <p>   `;
+            for (let i = this.logArchieve.length; i >= 0; i--)
+                notification.message += `${this.logArchieve[i].text} <br/>`;
+            notification.message += '</p>';
+            notification.message += this.getFooterText();
+
+            this.createNotificationCb(notification);
+        }
+
+        if (
+            this.processConfig.notifyOnFailure.enable &&
+            !this.isFailureMessageSent &&
+            this.prevStatus !== ProcessStatus.Online &&
+            this.prevStatus == info.status &&
+            this.prevRestartCount == info.restartCount
+        ) {
+            logger.info(`${this.processConfig.name}: Process failure detected. Creating notification.`);
+            let notification: Notification = {
+                processName: this.processConfig.name,
+                text2Watch: null,
+                type: 'failure',
+                from: null, // Will be filled with default
+                to: null, // Will be filled with default
+                subject: null, // Will be filled with default
+                when2Notify: this.processConfig.notifyOnFailure.when2Notify,
+                includeInDailyReport: this.processConfig.notifyOnFailure.includeInDailyReport,
+                maxMessagePerDay: this.processConfig.notifyOnFailure.maxMessagePerDay,
+                message: `
+                ${this.getHeaderText()}
+                ${new Date().toUTCString()}: ${this.processConfig.name} Failed
+                `,
+            };
+
+            // Add Whole Log
+            notification.message += `
+             <br/>
+             <br/>
+             <h5>------  LOGS  ------ </h5>
+             <hr/>
+             <p>   `;
+            for (let i = this.logArchieve.length; i >= 0; i--)
+                notification.message += `${this.logArchieve[i].text} <br/>`;
+            notification.message += '</p>';
+            notification.message += this.getFooterText();
+
+            this.isFailureMessageSent = true;
+            this.createNotificationCb(notification);
+        } else {
+            this.isFailureMessageSent = false;
+        }
+
+        this.prevStatus = info.status;
+        this.prevRestartCount = info.restartCount;
     }
 }

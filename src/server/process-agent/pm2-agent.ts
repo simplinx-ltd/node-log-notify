@@ -1,4 +1,4 @@
-import { ProcessAgent, ProcessInfo } from './process-agent';
+import { ProcessAgent, ProcessInfo, ProcessStatus } from './process-agent';
 import { spawn, exec } from 'child_process';
 import * as log4js from 'log4js';
 const logger = log4js.getLogger('PROCESS-AGENT-PM2');
@@ -35,9 +35,6 @@ export default class Pm2Agent extends ProcessAgent {
         // Memory: monit.memory (byte)
         // CPU: monit.cpu (%)
 
-        let prevStatus = 'online';
-        let prevRestartCount = 1000 * 1000; // big number
-        let isFailureMessageSent = false;
         setInterval((): void => {
             logger.trace('watchProcessInfo() called');
             exec(`pm2 jlist`, (err, stdout): void => {
@@ -48,68 +45,14 @@ export default class Pm2Agent extends ProcessAgent {
                     for (let i = 0; i < pList.length; i++) {
                         if (pList[i].name == this.processConfig.process2Watch) {
                             let info: ProcessInfo = {
-                                status: pList[i].pm2_env.status,
+                                status: this.convertStatusFromStr(pList[i].pm2_env.status),
                                 restartCount: pList[i].pm2_env.restart_time,
                                 memory: pList[i].monit.memory,
                                 cpu: pList[i].monit.cpu,
                             };
 
-                            if (
-                                this.processConfig.notifyOnRestart.enable &&
-                                prevRestartCount < pList[i].pm2_env.restart_time
-                            ) {
-                                logger.info(
-                                    `${this.processConfig.name}: Process restart detected. Creating notification.`,
-                                );
-                                info.notification = {
-                                    processName: this.processConfig.name,
-                                    text2Watch: null,
-                                    type: 'restart',
-                                    from: null, // Will be filled with default
-                                    to: null, // Will be filled with default
-                                    subject: null, // Will be filled with default
-                                    when2Notify: this.processConfig.notifyOnRestart.when2Notify,
-                                    includeInDailyReport: this.processConfig.notifyOnRestart.includeInDailyReport,
-                                    maxMessagePerDay: this.processConfig.notifyOnRestart.maxMessagePerDay,
-                                    message: `${new Date().toUTCString()}: ${this.processConfig.name} restarted ${pList[
-                                        i
-                                    ].pm2_env.restart_time - prevRestartCount} times in ${this
-                                        .PROCESS_INFO_UPDATE_CYCLE / 1000} sec.`,
-                                };
-                            }
-
-                            if (
-                                this.processConfig.notifyOnFailure.enable &&
-                                !isFailureMessageSent &&
-                                prevStatus !== 'online' &&
-                                prevStatus == pList[i].pm2_env.status &&
-                                prevRestartCount == pList[i].pm2_env.restart_time
-                            ) {
-                                logger.info(
-                                    `${this.processConfig.name}: Process failure detected. Creating notification.`,
-                                );
-                                info.notification = {
-                                    processName: this.processConfig.name,
-                                    text2Watch: null,
-                                    type: 'failure',
-                                    from: null, // Will be filled with default
-                                    to: null, // Will be filled with default
-                                    subject: null, // Will be filled with default
-                                    when2Notify: this.processConfig.notifyOnFailure.when2Notify,
-                                    includeInDailyReport: this.processConfig.notifyOnFailure.includeInDailyReport,
-                                    maxMessagePerDay: this.processConfig.notifyOnFailure.maxMessagePerDay,
-                                    message: `${new Date().toUTCString()}: ${this.processConfig.name} Failed`,
-                                };
-                                isFailureMessageSent = true;
-                            } else {
-                                isFailureMessageSent = false;
-                            }
-
                             logger.trace('Parsing new process-info: ', info);
-                            this.newProcessInfo(info);
-
-                            prevStatus = pList[i].pm2_env.status;
-                            prevRestartCount = pList[i].pm2_env.restart_time;
+                            this.processProcessInfo(info);
                             break;
                         }
                     }
@@ -119,5 +62,18 @@ export default class Pm2Agent extends ProcessAgent {
                 }
             });
         }, this.PROCESS_INFO_UPDATE_CYCLE);
+    }
+
+    protected convertStatusFromStr(strStatus: string): ProcessStatus {
+        switch (strStatus) {
+            case 'online':
+                return ProcessStatus.Online;
+            case 'stopped':
+                return ProcessStatus.Offline;
+            case 'failed':
+                return ProcessStatus.Failure;
+            default:
+                return ProcessStatus.UnKnown;
+        }
     }
 }

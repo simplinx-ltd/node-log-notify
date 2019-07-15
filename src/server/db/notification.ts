@@ -3,7 +3,12 @@ import { WhereOptions } from 'sequelize';
 
 export function createNotification(values: object): Promise<boolean> {
     return new Promise<boolean>((resolve, reject): void => {
-        Notification.create(values)
+        let notification: Notification = values as Notification;
+
+        // Strip '\n'
+        if (notification.message) notification.message.replace(/(\r\n|\n|\r)/gm, '');
+
+        Notification.create(notification)
             .then((): void => {
                 return resolve(true);
             })
