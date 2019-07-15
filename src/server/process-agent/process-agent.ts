@@ -81,6 +81,7 @@ export abstract class ProcessAgent {
     protected lastCreatedNotification: {
         [text2Watch: string]: number;
     } = {};
+
     ///
     protected prevStatus = ProcessStatus.Online;
     protected prevRestartCount = 1000 * 1000; // big number
@@ -91,13 +92,21 @@ export abstract class ProcessAgent {
     private createResourceMemoryCb: (timestamp: Date, process: string, value: number) => Promise<boolean>;
     private createNotificationCb: (values: object) => Promise<boolean>;
 
+    ///
+    private defaultTo: string;
+    private defaultFrom: string;
+
     public constructor(
         processConfig: Process,
+        defaultTo: string,
+        defaultFrom: string,
         createNotificationCb: (values: object) => Promise<boolean>,
         createResourceCpuCb: (timestamp: Date, process: string, value: number) => Promise<boolean>,
         createResourceMemoryCb: (timestamp: Date, process: string, value: number) => Promise<boolean>,
     ) {
         this.processConfig = processConfig;
+        this.defaultTo = defaultTo;
+        this.defaultFrom = defaultFrom;
         this.createNotificationCb = createNotificationCb;
         this.createResourceCpuCb = createResourceCpuCb;
         this.createResourceMemoryCb = createResourceMemoryCb;
@@ -193,8 +202,8 @@ export abstract class ProcessAgent {
                     processName: this.processConfig.name,
                     text2Watch: foundLogWatch.text2Watch,
                     type: 'log-notify',
-                    from: null,
-                    to: null,
+                    from: this.defaultFrom,
+                    to: this.defaultTo,
                     subject: foundLogWatch.mailOptions.subject,
                     message: message,
                     when2Notify: foundLogWatch.when2Notify,
@@ -216,9 +225,9 @@ export abstract class ProcessAgent {
                 processName: this.processConfig.name,
                 text2Watch: null,
                 type: 'restart',
-                from: null, // Will be filled with default
-                to: null, // Will be filled with default
-                subject: null, // Will be filled with default
+                from: this.defaultFrom,
+                to: this.defaultTo,
+                subject: 'Process Restart Notification / Node-Log-Notify',
                 when2Notify: this.processConfig.notifyOnRestart.when2Notify,
                 includeInDailyReport: this.processConfig.notifyOnRestart.includeInDailyReport,
                 maxMessagePerDay: this.processConfig.notifyOnRestart.maxMessagePerDay,
@@ -256,9 +265,9 @@ export abstract class ProcessAgent {
                 processName: this.processConfig.name,
                 text2Watch: null,
                 type: 'failure',
-                from: null, // Will be filled with default
-                to: null, // Will be filled with default
-                subject: null, // Will be filled with default
+                from: this.defaultFrom,
+                to: this.defaultTo,
+                subject: 'Process Failure Notification / Node-Log-Notify',
                 when2Notify: this.processConfig.notifyOnFailure.when2Notify,
                 includeInDailyReport: this.processConfig.notifyOnFailure.includeInDailyReport,
                 maxMessagePerDay: this.processConfig.notifyOnFailure.maxMessagePerDay,
