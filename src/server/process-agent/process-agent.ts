@@ -53,9 +53,9 @@ export interface Notification {
     processName: string;
     text2Watch: string | null;
     type: 'log-notify' | 'restart' | 'failure';
-    to: string;
-    from: string;
-    subject: string;
+    emailTo: string;
+    emailFrom: string;
+    emailSubject: string;
     when2Notify: When;
     includeInDailyReport: boolean;
     maxMessagePerDay: number;
@@ -198,18 +198,19 @@ export abstract class ProcessAgent {
 
                 message += this.getFooterText();
 
-                this.createNotificationCb({
+                let notification: Notification = {
                     processName: this.processConfig.name,
                     text2Watch: foundLogWatch.text2Watch,
                     type: 'log-notify',
-                    from: this.defaultFrom,
-                    to: this.defaultTo,
-                    subject: foundLogWatch.mailOptions.subject,
+                    emailFrom: this.defaultFrom,
+                    emailTo: this.defaultTo,
+                    emailSubject: foundLogWatch.mailOptions.subject,
                     message: message,
                     when2Notify: foundLogWatch.when2Notify,
                     includeInDailyReport: foundLogWatch.includeInDailyReport,
                     maxMessagePerDay: foundLogWatch.maxMessagePerDay,
-                });
+                };
+                this.createNotificationCb(notification);
             }
         }
     }
@@ -225,9 +226,9 @@ export abstract class ProcessAgent {
                 processName: this.processConfig.name,
                 text2Watch: null,
                 type: 'restart',
-                from: this.defaultFrom,
-                to: this.defaultTo,
-                subject: 'Process Restart Notification / Node-Log-Notify',
+                emailFrom: this.defaultFrom,
+                emailTo: this.defaultTo,
+                emailSubject: 'Process Restart Notification / Node-Log-Notify',
                 when2Notify: this.processConfig.notifyOnRestart.when2Notify,
                 includeInDailyReport: this.processConfig.notifyOnRestart.includeInDailyReport,
                 maxMessagePerDay: this.processConfig.notifyOnRestart.maxMessagePerDay,
@@ -265,9 +266,9 @@ export abstract class ProcessAgent {
                 processName: this.processConfig.name,
                 text2Watch: null,
                 type: 'failure',
-                from: this.defaultFrom,
-                to: this.defaultTo,
-                subject: 'Process Failure Notification / Node-Log-Notify',
+                emailFrom: this.defaultFrom,
+                emailTo: this.defaultTo,
+                emailSubject: 'Process Failure Notification / Node-Log-Notify',
                 when2Notify: this.processConfig.notifyOnFailure.when2Notify,
                 includeInDailyReport: this.processConfig.notifyOnFailure.includeInDailyReport,
                 maxMessagePerDay: this.processConfig.notifyOnFailure.maxMessagePerDay,
