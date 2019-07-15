@@ -245,7 +245,7 @@ export abstract class ProcessAgent {
             <h5>------  LOGS  ------ </h5>
             <hr/>
             <p>   `;
-            for (let i = this.logArchieve.length; i >= 0; i--)
+            for (let i = this.logArchieve.length - 1; i >= 0; i--)
                 notification.message += `${this.logArchieve[i].text} <br/>`;
             notification.message += '</p>';
             notification.message += this.getFooterText();
@@ -284,7 +284,7 @@ export abstract class ProcessAgent {
              <h5>------  LOGS  ------ </h5>
              <hr/>
              <p>   `;
-            for (let i = this.logArchieve.length; i >= 0; i--)
+            for (let i = this.logArchieve.length - 1; i >= 0; i--)
                 notification.message += `${this.logArchieve[i].text} <br/>`;
             notification.message += '</p>';
             notification.message += this.getFooterText();
