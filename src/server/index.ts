@@ -187,7 +187,16 @@ function initProcessAgent(_configData: Config): void {
     try {
         _configData.processList.forEach((processConfig): void => {
             logger.debug(`Creating process-agent: ${JSON.stringify(processConfig)}`);
-            processAgentList.create(processConfig, createNotification, createResourceCpu, createResourceMemory).start();
+            processAgentList
+                .create(
+                    processConfig,
+                    _configData.sendMailOptions.defaultTo,
+                    _configData.sendMailOptions.from,
+                    createNotification,
+                    createResourceCpu,
+                    createResourceMemory,
+                )
+                .start();
         });
     } catch (e) {
         logger.fatal('Could not initialize process-agents.');

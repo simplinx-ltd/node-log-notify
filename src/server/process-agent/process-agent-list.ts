@@ -7,6 +7,8 @@ let agentList: ProcessAgent[] = [];
 
 export function create(
     processData: Process,
+    defaultTo: string,
+    defaultFrom: string,
     createNotificationCb: (values: object) => Promise<boolean>,
     createResourceCpuCb: (timestamp: Date, process: string, value: number) => Promise<boolean>,
     createResourceMemoryCb: (timestamp: Date, process: string, value: number) => Promise<boolean>,
@@ -15,7 +17,14 @@ export function create(
         case 'pm2':
             return agentList[
                 agentList.push(
-                    new Pm2Agent(processData, createNotificationCb, createResourceCpuCb, createResourceMemoryCb),
+                    new Pm2Agent(
+                        processData,
+                        defaultTo,
+                        defaultFrom,
+                        createNotificationCb,
+                        createResourceCpuCb,
+                        createResourceMemoryCb,
+                    ),
                 ) - 1
             ];
         default:
