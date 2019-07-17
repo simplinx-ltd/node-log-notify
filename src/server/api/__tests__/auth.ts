@@ -13,52 +13,30 @@ beforeEach((): void => {
 
 describe('Test AuthMiddleware', (): void => {
     describe('authMiddleware() Operations', (): void => {
-        it('Calls authMiddleware Function with Invalid Auth Token', (done): void => {
-            req.body.token = 'testToken';
-            auth.authMiddleware()(req, res, (expectedError): void => {
-                let err: ApiError = ApiError.accessError();
-                expect(expectedError).toEqual(err);
-                done();
+        test('Calls authMiddleware Function with Invalid Auth Token', (): void => {
+            req.body.token = 'asdfasdf';
+            auth.authMiddleware()(req, res, (next): void => {
+                expect(next).toEqual(ApiError.accessError());
             });
         });
 
-        it('Calls authMiddleware Function without Auth Token in Body', (done): void => {
-            auth.authMiddleware()(req, res, (expectedError): void => {
-                let err: ApiError = ApiError.accessError();
-                expect(expectedError).toEqual(err);
-                done();
+        test('Calls authMiddleware Function without Auth Token in Body', (): void => {
+            auth.authMiddleware()(req, res, (next): void => {
+                req.body.token = 'accessToken';
+                expect(next).toEqual(ApiError.accessError());
             });
-        });
-    });
-
-    describe('Test Set Credentials', (): void => {
-        it('Calls setUsernamePassword Function', (done): void => {
-            let username = 'testUsername';
-            let password = 'testPassword';
-
-            auth.setUsernamePassword({ username, password });
-            done();
         });
     });
 
     describe('authLogin() Operations', (): void => {
-        it('Calls authLogin Function with Success', (done): void => {
-            let credentials = { username: 'testUsername', password: 'testPassword' };
-
-            req.body.username = credentials.username;
-            req.body.password = credentials.password;
-
-            auth.setUsernamePassword(credentials);
+        test('Calls authLogin Function Without Credentials', (): void => {
+            auth.setUsernamePassword({ username: null, password: null });
             auth.authLogin(req, res, (next): void => {
-                expect(res.statusCode).toEqual(200);
-                expect(res.statusMessage).toEqual('OK');
-                expect(next).not.toBe(ApiError.accessError());
-                done();
+                expect(next).toEqual(ApiError.accessError());
             });
-            done();
         });
 
-        it('Calls authLogin Function With Invalid Credentials', (done): void => {
+        test('Calls authLogin Function With Invalid Credentials', (): void => {
             let credentials = { username: 'testUsername', password: 'testPassword' };
 
             req.body.username = 'testUsername';
@@ -67,44 +45,32 @@ describe('Test AuthMiddleware', (): void => {
             auth.setUsernamePassword(credentials);
             auth.authLogin(req, res, (next): void => {
                 expect(next).toEqual(ApiError.accessError());
-                done();
             });
-            done();
         });
 
-        it('Calls authLogin Function Without  Credentials', (done): void => {
-            auth.authLogin(req, res, (next): void => {
-                expect(next).toEqual(ApiError.accessError());
-                done();
-            });
-            done();
-        });
-
-        it('Calls authLogin Function Without body in Request', (done): void => {
+        test('Calls authLogin Function Without body in Request', (): void => {
             let credentials = { username: 'testUsername', password: 'testPassword' };
 
             auth.setUsernamePassword(credentials);
             auth.authLogin(req, res, (next): void => {
                 expect(next).toEqual(ApiError.accessError());
-                done();
             });
-            done();
         });
     });
 
     describe('getAuthHashCode() Function', (): void => {
-        it('Should validate the hashCode that returned hash code', (done): void => {
+        test('Should validate the hashCode that returned hash code', (): void => {
             let hashCode = auth.getAuthHashCode();
             expect(typeof hashCode).toBe('string');
             expect(hashCode.length).toBe(64);
-            done();
         });
     });
 
     describe('authLogout() Function', (): void => {
-        it('Calls authLogout Function', (done): void => {
+        test('Calls authLogout Function', (): void => {
+            const mockedLogout = jest.spyOn(auth, 'authLogout');
             auth.authLogout(req, res);
-            done();
+            expect(mockedLogout).toHaveBeenCalledWith(req, res);
         });
     });
 });

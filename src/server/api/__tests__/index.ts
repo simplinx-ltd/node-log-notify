@@ -1,17 +1,35 @@
 import { mocked } from 'ts-jest/utils';
-import * as sxApi from 'sx-sequelize-api';
 import { Request, Response, NextFunction } from 'express';
 import * as express from 'express';
 import * as request from 'supertest';
-import api from '../resource-cpu';
-import { authMiddleware } from '../auth';
+
+import * as sxApi from 'sx-sequelize-api';
+import api from '../index';
+import * as auth from '../auth';
+import { Config } from '../../config/config-type';
 
 jest.mock('sx-sequelize-api');
 jest.mock('../auth');
 
 const mockedSxApi = mocked(sxApi, false);
 const mockedModelApi = mocked(mockedSxApi.ModelRestApi, false);
-const mockedAuth = mocked(authMiddleware, false);
+const mockedAuth = mocked(auth, false);
+
+mockedAuth.authLogin.mockImplementation(
+    (req: Request, res: Response): Response => {
+        return res.json(true);
+    },
+);
+
+mockedAuth.authLogout.mockImplementation((req: Request, res: Response): void => {
+    res.json(true);
+});
+
+mockedAuth.authMiddleware.mockImplementation((): ((req: Request, res: Response, next: NextFunction) => void) => {
+    return (req: Request, res: Response, next: NextFunction): void => {
+        return next();
+    };
+});
 
 mockedModelApi.mockImplementation(
     (): sxApi.ModelRestApi => {
@@ -40,48 +58,62 @@ mockedModelApi.mockImplementation(
     },
 );
 
-mockedAuth.mockImplementation((): ((req: Request, res: Response, next: NextFunction) => void) => {
-    return (req: Request, res: Response, next: NextFunction): void => {
-        return next();
-    };
-});
+let configData: Config = {
+    webOptions: {
+        username: 'testUsername',
+        password: 'testPassword',
+        port: null,
+    },
+    sendMailOptions: null,
+    processList: null,
+    db: null,
+};
 
 let app = express();
-app.use(api(null));
+api(configData, app, null);
 
-describe('ResourceCPU Endpoints', (): void => {
-    test('Endpoint / OK', (done): void => {
+describe('API Endpoints', (): void => {
+    test('/auth/login OK', (done): void => {
         request(app)
-            .get('/')
+            .post('/api/auth/login/')
             .then((response): void => {
                 expect(response.status).toBe(200);
                 done();
             });
     });
 
-    test('Endpoint /count OK', (done): void => {
+    test('/auth/logout OK', (done): void => {
         request(app)
-            .get('/count')
+            .post('/api/auth/logout')
             .then((response): void => {
                 expect(response.status).toBe(200);
                 done();
             });
     });
 
-    test('Endpoint /:id OK', (done): void => {
+    test('/resource-memory / OK', (done): void => {
         request(app)
-            .get('/1')
+            .get('/api/resource-memory')
             .then((response): void => {
                 expect(response.status).toBe(200);
                 done();
             });
     });
 
-    test('Endpoint /404 Not Found', (done): void => {
+    test('/resource-cpu / OK', (done): void => {
         request(app)
-            .post('/NotFound')
+            .get('/api/resource-cpu')
             .then((response): void => {
-                expect(response.status).toBe(404);
+                expect(response.status).toBe(200);
+                done();
+            });
+    });
+
+    test('/notification / OK', (done): void => {
+        request(app)
+            .get('/api/notification')
+            .then((response): void => {
+                expect(response.status).toBe(200);
                 done();
             });
     });
