@@ -13,7 +13,7 @@ const mockedSxApi = mocked(sxApi, false);
 const mockedModelApi = mocked(mockedSxApi.ModelRestApi, false);
 const mockedAuth = mocked(authMiddleware, false);
 
-export default mockedModelApi.mockImplementation(
+mockedModelApi.mockImplementation(
     (): sxApi.ModelRestApi => {
         function getAll(): (req: Request, res: Response, next: NextFunction) => void {
             return (req: Request, res: Response): Response => {

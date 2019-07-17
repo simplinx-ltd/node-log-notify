@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import * as express from 'express';
 import * as request from 'supertest';
 
-import * as sxApi from 'sx-sequelize-api';
-import api from '../index';
-import * as auth from '../auth';
 import { Config } from '../../config/config-type';
+import * as sxApi from 'sx-sequelize-api';
+import * as auth from '../auth';
+import api from '../index';
 
 jest.mock('sx-sequelize-api');
 jest.mock('../auth');

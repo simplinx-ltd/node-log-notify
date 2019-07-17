@@ -15,7 +15,7 @@ let credentials = {
     password: null,
 };
 
-export { authMiddleware, authLogin, authLogout, getAuthHashCode, setUsernamePassword };
+export { authMiddleware, authLogin, authLogout, getAuthHashCode, setUsernamePassword, getUsernamePassword };
 
 let _hashCode: string = null;
 
@@ -85,4 +85,8 @@ function getAuthHashCode(): string {
 
 function setUsernamePassword(_credentials: { username: string; password: string }): void {
     credentials = _credentials;
+}
+
+function getUsernamePassword(): object {
+    return { ...credentials };
 }

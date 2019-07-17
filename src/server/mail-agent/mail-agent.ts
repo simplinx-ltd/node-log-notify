@@ -36,16 +36,16 @@ export function initialize(nodeMailerTransportOptions: any, _defaultTo: string, 
     mailTransport = nodeMailer.createTransport(nodeMailerTransportOptions);
     defaultTo = _defaultTo;
     defaultFrom = _defaultFrom;
-
     start();
 }
 
-function start(): void {
+export function start(): void {
     // Cyclic
     setInterval((): void => {
         // Check if we have mail to send
         getNotifications({ status: NotificationStatus.NEW, when2Notify: When.immediately }, 3)
             .then((rows): void => {
+                console.log('sdygasydgsa');
                 let dt = new Date();
                 rows.forEach((row): void => {
                     // Decide if we exceed mail limit
