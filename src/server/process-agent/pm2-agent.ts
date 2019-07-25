@@ -6,7 +6,6 @@ const logger = log4js.getLogger('PROCESS-AGENT-PM2');
 export default class Pm2Agent extends ProcessAgent {
     protected watchProcessLogOutput(): void {
         logger.trace('watchProcessLogOutput() called');
-
         this.logListenerApp = spawn('pm2', ['logs', this.processConfig.process2Watch, '--json'], { detached: false });
 
         this.logListenerApp.stdout.on('data', (data): void => {

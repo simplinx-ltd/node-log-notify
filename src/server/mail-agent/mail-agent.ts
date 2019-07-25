@@ -45,7 +45,6 @@ export function start(): void {
         // Check if we have mail to send
         getNotifications({ status: NotificationStatus.NEW, when2Notify: When.immediately }, 3)
             .then((rows): void => {
-                console.log('sdygasydgsa');
                 let dt = new Date();
                 rows.forEach((row): void => {
                     // Decide if we exceed mail limit
@@ -114,7 +113,6 @@ export function start(): void {
         let dt = new Date();
         let startDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1));
         let endDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 23, 59, 59));
-
         let report: DailyReport = {};
         getNotifications({
             createdAt: {
