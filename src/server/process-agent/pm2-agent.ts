@@ -7,7 +7,6 @@ export default class Pm2Agent extends ProcessAgent {
     protected watchProcessLogOutput(): void {
         logger.trace('watchProcessLogOutput() called');
         this.logListenerApp = spawn('pm2', ['logs', this.processConfig.process2Watch, '--json'], { detached: false });
-
         this.logListenerApp.stdout.on('data', (data): void => {
             let divByNewLine: string[] = data.toString().split('\n');
             for (let i = 0; i < divByNewLine.length; i++) {

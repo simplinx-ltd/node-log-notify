@@ -1,7 +1,6 @@
 import { mocked } from 'ts-jest/utils';
 import * as log4js from 'log4js';
 import * as nodeMailer from 'nodemailer';
-import * as nodeSchedule from 'node-schedule';
 
 import * as MailAgent from '../mail-agent';
 import * as notification from '../../db/notification';
@@ -79,9 +78,6 @@ const spySendMail = jest.fn().mockImplementation(function sendMail(): Promise<bo
     return Promise.reject('rejectError');
 });
 
-// nodeSchedule - scheduleJob
-const spyScheduleJob = jest.spyOn(nodeSchedule, 'scheduleJob');
-
 // notifications
 const mockedNotification = mocked(notification, false);
 
@@ -113,6 +109,11 @@ afterEach((): void => {
     mockedNotification.getNotifications.mockReset();
     mockedNotification.getNotificationsCount.mockReset();
     jest.clearAllTimers();
+});
+
+afterAll((): void => {
+    jest.clearAllTimers();
+    jest.restoreAllMocks();
 });
 
 describe('MailAgent Tests', (): void => {

@@ -19,7 +19,11 @@ jest.mock(
                 return spyError(message);
             }
 
-            return ({ info, error } as unknown) as log4js.Logger;
+            function warn(message?: string): jest.Mock {
+                return spyWarn(message);
+            }
+
+            return ({ info, error, warn } as unknown) as log4js.Logger;
         }
         return ({ getLogger } as unknown) as log4js.Logger;
     },
@@ -50,6 +54,7 @@ jest.mock(
 // log4js - logger
 const spyError = jest.fn().mockReturnValue((message?: string): string => message);
 const spyInfo = jest.fn().mockReturnValue((message?: string): string => message);
+const spyWarn = jest.fn().mockReturnValue((message?: string): string => message);
 
 // nodeMailer - transporter
 const spyMailTransporter = jest.fn().mockImplementation(
@@ -76,6 +81,11 @@ afterEach((): void => {
     mockedNotification.getNotifications.mockReset();
     mockedNotification.getNotificationsCount.mockReset();
     jest.clearAllTimers();
+});
+
+afterAll((): void => {
+    jest.clearAllTimers();
+    jest.restoreAllMocks();
 });
 
 describe('MailAgent Tests', (): void => {
