@@ -14,7 +14,7 @@ import * as program from 'commander';
 import * as log4js from 'log4js';
 import * as pkg from './package.json';
 import * as config from './config/config';
-import * as mailAgent from './mail-agent/mail-agent';
+import mailAgent from './mail-agent/mail-agent';
 import defineModels from './db/models';
 import * as processAgentList from './process-agent/process-agent-list';
 import { createNotification } from './db/notification';

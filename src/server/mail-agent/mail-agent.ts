@@ -29,7 +29,7 @@ interface DailyReport {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function initialize(nodeMailerTransportOptions: any, _defaultTo: string, _defaultFrom: string): void {
+function initialize(nodeMailerTransportOptions: any, _defaultTo: string, _defaultFrom: string): void {
     if (isInitialized) return logger.warn('Already initialized. Omitting.');
 
     logger.info('Initializing....');
@@ -37,10 +37,10 @@ export function initialize(nodeMailerTransportOptions: any, _defaultTo: string, 
     mailTransport = nodeMailer.createTransport(nodeMailerTransportOptions);
     defaultTo = _defaultTo;
     defaultFrom = _defaultFrom;
-    start();
+    mailAgent.start();
 }
 
-export function start(): void {
+function start(): void {
     // Cyclic
     setInterval((): void => {
         // Check if we have mail to send
@@ -193,3 +193,10 @@ export function start(): void {
             });
     });
 }
+
+const mailAgent = {
+    initialize,
+    start,
+};
+
+export default mailAgent;
