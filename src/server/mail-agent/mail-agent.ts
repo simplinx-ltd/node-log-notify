@@ -33,6 +33,7 @@ export function initialize(nodeMailerTransportOptions: any, _defaultTo: string, 
     if (isInitialized) return logger.warn('Already initialized. Omitting.');
 
     logger.info('Initializing....');
+    isInitialized = true;
     mailTransport = nodeMailer.createTransport(nodeMailerTransportOptions);
     defaultTo = _defaultTo;
     defaultFrom = _defaultFrom;
