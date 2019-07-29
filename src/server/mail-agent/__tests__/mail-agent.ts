@@ -9,7 +9,7 @@ jest.mock('node-schedule');
 jest.mock('../../db/notification');
 
 const mockCreateTransport = mocked(nodeMailer.createTransport, false);
-const mockSchleduleJob = mocked(nodeSchedule.scheduleJob, false);
+const mockScheduleJob = mocked(nodeSchedule.scheduleJob, false);
 const mockNotification = mocked(notification, true);
 const spyStart = jest.spyOn(mailAgent, 'start');
 
@@ -36,6 +36,13 @@ describe('Mail Agent', (): void => {
         mailAgent.initialize(null, '', '');
         expect(mockCreateTransport.mock.calls.length).toBe(1);
         expect(spyStart).toHaveBeenCalled();
+    });
+
+    test('initialize Function Should Do Not Call Start Function If is Initialized', (): void => {
+        jest.clearAllTimers();
+        mailAgent.initialize(null, '', '');
+        expect(mockCreateTransport.mock.calls.length).toBe(0);
+        expect(spyStart).not.toBeCalled();
     });
 
     test('Mail Count < maxMessagePerDay then send mails', (done): void => {
@@ -157,7 +164,7 @@ describe('Mail Agent', (): void => {
 
     // nodeSchedule - scheduleJob
     test('sendMail sends Nothing to Report Message If No Notification', (done): void => {
-        mockSchleduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
+        mockScheduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
         mockNotification.getNotifications.mockResolvedValueOnce([]);
         spySendMail.mockResolvedValue(true);
 
@@ -174,7 +181,7 @@ describe('Mail Agent', (): void => {
     });
 
     test('sendMail Should Not Send Any Mail If getNotifications Rejects', (done): void => {
-        mockSchleduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
+        mockScheduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
         mockNotification.getNotifications.mockRejectedValue(null);
 
         mailAgent.start();
@@ -186,10 +193,11 @@ describe('Mail Agent', (): void => {
     });
 
     test('sendMail Sends Report Mail in scheduleJob', (done): void => {
-        mockSchleduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
+        mockScheduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
         mockNotification.getNotifications.mockResolvedValueOnce([
             { id: 1, type: 'restart' },
             { id: 2, type: 'failure' },
+            { id: 1, type: 'log-notify' },
         ] as any); // notification type
         spySendMail.mockResolvedValue(true);
 
@@ -203,23 +211,8 @@ describe('Mail Agent', (): void => {
         });
     });
 
-    test('sendMail Sends Report Mail in scheduleJob - 2', (done): void => {
-        mockSchleduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
-        mockNotification.getNotifications.mockResolvedValueOnce([{ id: 1, type: 'log-notify' }] as any); // notification type
-        spySendMail.mockResolvedValue(true);
-
-        mailAgent.start();
-
-        flushPromises().then((): void => {
-            expect(mockNotification.getNotifications.mock.calls.length).toBe(1);
-            expect(spySendMail.mock.calls.length).toBe(1);
-            expect(spySendMail.mock.calls[0][0].subject).toBe('Daily Report - node-log-notify');
-            done();
-        });
-    });
-
     test('sendMail Rejects Error ', (done): void => {
-        mockSchleduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
+        mockScheduleJob.mockImplementationOnce((rule?: string, callback?: Function): nodeSchedule.Job => callback());
         mockNotification.getNotifications.mockResolvedValueOnce([]);
         spySendMail.mockRejectedValueOnce(null);
 
