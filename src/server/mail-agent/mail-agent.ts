@@ -29,15 +29,15 @@ interface DailyReport {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function initialize(nodeMailerTransportOptions: any, _defaultTo: string, _defaultFrom: string): void {
+function initialize(nodeMailerTransportOptions: any, _defaultTo: string, _defaultFrom: string): void {
     if (isInitialized) return logger.warn('Already initialized. Omitting.');
 
     logger.info('Initializing....');
+    isInitialized = true;
     mailTransport = nodeMailer.createTransport(nodeMailerTransportOptions);
     defaultTo = _defaultTo;
     defaultFrom = _defaultFrom;
-
-    start();
+    mailAgent.start();
 }
 
 function start(): void {
@@ -114,7 +114,6 @@ function start(): void {
         let dt = new Date();
         let startDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1));
         let endDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 23, 59, 59));
-
         let report: DailyReport = {};
         getNotifications({
             createdAt: {
@@ -194,3 +193,10 @@ function start(): void {
             });
     });
 }
+
+const mailAgent = {
+    initialize,
+    start,
+};
+
+export default mailAgent;

@@ -30,20 +30,20 @@
 #### Login and Notifications Pages
 <p align="center">
   <a href="docs/screenshots/login.png" target="_blank">
-  	<img src="docs/screenshots/login.png" width="350" title="Login" alt="Login">
+  	<img src="https://raw.github.com/simplinx-ltd/node-log-notify/master/docs/screenshots/login.png?raw=true" width="350" title="Login" alt="Login">
   </a>
   <a href="docs/screenshots/notification.png">
-    <img src="docs/screenshots/notification.png" width="350" alt="Notifications" title="Notification">
+    <img src="https://raw.github.com/simplinx-ltd/node-log-notify/master/docs/screenshots/notification.png?raw=true" width="350" alt="Notifications" title="Notification">
   </a>
 </p>
 
 #### Resources (Memory and CPU) Page
 <p align="center">
   <a href="docs/screenshots/resource-memory.png" target="_blank">
-    <img src="docs/screenshots/resource-memory.png" width="350" title="Resource Memory" alt="Resource Memory">
+    <img src="https://raw.github.com/simplinx-ltd/node-log-notify/master/docs/screenshots/resource-memory.png?raw=true" width="350" title="Resource Memory" alt="Resource Memory">
   </a>
   <a href="docs/screenshots/resource-cpu.png">
-    <img src="docs/screenshots/resource-cpu.png" width="350" alt="Resource CPU" title="Resource CPU">
+    <img src="https://raw.github.com/simplinx-ltd/node-log-notify/master/docs/screenshots/resource-cpu.png?raw=true" width="350" alt="Resource CPU" title="Resource CPU">
   </a>
 </p>
 </div>
