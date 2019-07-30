@@ -15,9 +15,10 @@ describe('ProcessAgentList', (): void => {
 
         expect(processAgent).toBeInstanceOf(Pm2Agent);
         expect(mockedPm2Agent.mock.calls.length).toBe(1);
+        expect(mockedPm2Agent).toBeCalledWith({ processManagerType: 'pm2' }, null, null, null, null, null);
     });
 
-    test('Should Return null If create Function Called without processManagerType', (): void => {
+    test('Should Returns null If processManagerType Not Exists', (): void => {
         let processAgent = create(({} as unknown) as Process, null, null, null, null, null);
 
         expect(processAgent).toBeNull();
