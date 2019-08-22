@@ -1,6 +1,6 @@
 {
   "name": "node-log-notify",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Watch App Logs & Notify",
   "scripts": {
     "start": "NODE_ENV=development node build/index.js",

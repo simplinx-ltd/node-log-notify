@@ -137,7 +137,7 @@
 ```
 
 ### Database
-Node Log Notify uses SQLiteDB by default config. If you want to connect a MySQL Database you can change db config as like follows in your config file that is your extracted.
+node-log-notify uses SQLiteDB by default. If you want to use a MySQL database you can change db config like below;
 
 ```
 "db": {
