@@ -80,9 +80,9 @@
 ```
 {
 	"webOptions":{
-	"port":8085,
-	"username":"USER",
-	"password":"123456"
+		"port":8085,
+		"username":"USER",
+		"password":"123456"
 	},
 	"db": {
         "dialect": "sqlite",
