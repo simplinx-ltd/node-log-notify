@@ -80,19 +80,15 @@
 ```
 {
 	"webOptions":{
-	"port":8085,
-	"username":"USER",
-	"password":"123456"
+		"port":8085,
+		"username":"USER",
+		"password":"123456"
 	},
 	"db": {
-		"dialect": "mysql",
-		"host": "localhost",
-		"database": "node-log-notify",
-		"username": "node-log-notify",
-		"password": "node-log-notify",
-		"logging": false,
-		"port": 3306
-	},
+        "dialect": "sqlite",
+        "storage": "node-log-notify.db",
+        "logging": false
+    },
 	"sendMailOptions": {
 		"nodeMailerTransportOptions": {
 			"host": "mail.example.com",
@@ -140,7 +136,20 @@
 }
 ```
 
+### Database
+node-log-notify uses SQLiteDB by default. If you want to use a MySQL database you can change db config like below;
 
+```
+"db": {
+		"dialect": "mysql",
+		"host": "localhost",
+		"database": "node-log-notify",
+		"username": "node-log-notify",
+		"password": "node-log-notify",
+		"logging": false,
+		"port": 3306
+	}
+```
 ## License
 MIT
 
