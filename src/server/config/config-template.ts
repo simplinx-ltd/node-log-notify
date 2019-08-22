@@ -5,13 +5,9 @@ const configTemplate = `{
         "password": "PASSWORD"
     },
     "db": {
-        "dialect": "mysql",
-        "host": "localhost",
-        "database": "node-log-notify",
-        "username": "node-log-notify",
-        "password": "PASS",
-        "logging": false,
-        "port": 3306
+        "dialect": "sqlite",
+        "storage": "node-log-notify.db",
+        "logging": false
     },
     "sendMailOptions": {
         "nodeMailerTransportOptions": {
@@ -27,7 +23,7 @@ const configTemplate = `{
         "defaultTo": "xxx@gmail.com",
         "defaultSubject": "Process Notification",
         "sendDailyReport":true
-    },    
+    },
     "processList": [
         {
             "name": "app-1",

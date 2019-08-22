@@ -85,14 +85,10 @@
 	"password":"123456"
 	},
 	"db": {
-		"dialect": "mysql",
-		"host": "localhost",
-		"database": "node-log-notify",
-		"username": "node-log-notify",
-		"password": "node-log-notify",
-		"logging": false,
-		"port": 3306
-	},
+        "dialect": "sqlite",
+        "storage": "node-log-notify.db",
+        "logging": false
+    },
 	"sendMailOptions": {
 		"nodeMailerTransportOptions": {
 			"host": "mail.example.com",
@@ -140,7 +136,20 @@
 }
 ```
 
+### Database
+Node Log Notify uses SQLiteDB by default config. If you want to connect a MySQL Database you can change db config as like follows in your config file that is your extracted.
 
+```
+"db": {
+		"dialect": "mysql",
+		"host": "localhost",
+		"database": "node-log-notify",
+		"username": "node-log-notify",
+		"password": "node-log-notify",
+		"logging": false,
+		"port": 3306
+	}
+```
 ## License
 MIT
 
