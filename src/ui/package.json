@@ -22,7 +22,7 @@
     "@angular/router": "~8.0.1",
     "angular-datatables": "^8.0.0",
     "bytes": "^3.1.0",
-    "datatables.net": "^1.10.19",
+    "datatables.net": "^1.10.22",
     "datatables.net-dt": "^1.10.19",
     "ng-chartjs": "^0.1.2",
     "rxjs": "~6.4.0",
